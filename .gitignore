@@ -1,0 +1,17 @@
+node_modules/
+dist/
+web-dist/
+src-tauri/target/
+src-tauri/gen/
+.local/
+public/local-seed.json
+playwright-report/
+test-results/
+__pycache__/
+*.pyc
+*.tsbuildinfo
+*.db
+*.db-shm
+*.db-wal
+.env*
+!.env.example

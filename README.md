@@ -1,0 +1,83 @@
+# 归录 · 班级考勤
+
+面向 Windows 桌面的本地班级考勤应用。使用 React、TypeScript、Vite 和 Tauri 2，提供周课表、异常考勤登记、多工作台、学期汇总与备份恢复。
+
+## 使用
+
+本机构建完成后，直接打开 `dist/GuiLu-latest/归录.exe`，或将 `dist/GuiLu-latest.zip` 解压后运行。运行环境为 Windows 10/11 x64，需要 Microsoft Edge WebView2 Runtime。
+
+- 课程表按北京时间显示当前周，支持周次切换、课程详情、添加和编辑课程。
+- 点击学生对应类型下的 `+`，登记一次请假、旷课、迟到或早退。每条记录保存日期、时间、课程快照与备注。
+- 支持批量登记、补记、查看个人明细、修改、撤销和恢复。统计异常登记次数，未登记不代表已确认出勤。
+- 汇总可以按日期及课程筛选，导出 Excel（汇总、明细两个工作表）或 Markdown。
+- 导入包含“姓名”“学号”列的 `.xlsx` 或 UTF-8 `.csv`，创建独立工作台。第一张工作表用于名单导入，重复学号或缺失信息会阻止导入。
+- 在“学期设置”中随时修改开学日期、作息、总周数、备忘与新增考勤类型。
+- 在“数据与备份”中导出完整 JSON；恢复先校验 SHA-256 和数据结构，再创建独立副本，保留已有工作台。
+
+完整操作说明见 [使用说明](docs/使用说明.md)。
+
+## 开发
+
+需要 Node.js 22.12+、Rust MSVC、Visual Studio C++ Build Tools、Windows SDK 和 WebView2。依赖锁定在 `package-lock.json` 和 `src-tauri/Cargo.lock`。
+
+```powershell
+npm ci
+npm run dev
+# http://127.0.0.1:15473
+npm run desktop:dev
+npm run test
+npm run test:e2e
+cargo test --manifest-path src-tauri/Cargo.toml --lib
+npm run test:native
+npm run release
+```
+
+浏览器测试默认使用本机 Microsoft Edge。Vite 固定为 15473 端口，并忽略 Rust 构建目录，避免 Windows 文件占用导致监听失败。
+
+桌面验收会单独构建 Debug 版本，并用本机 9333 调试端口连接 WebView2，测试完成关闭应用。发行版不会开启此端口。桌面验收还会操作该测试实例的 Windows 保存对话框。
+
+## 本地名单与仓库边界
+
+公开源码不包含真实学生姓名、学号、考勤数据或个人备份。无本地名单时，源码首次启动提供预置课表及空名单，可在应用里新建工作台导入名单。需要构建个人版时：
+
+```powershell
+npm run roster:seed -- "你的班级信息表.xlsx"
+npm run release
+```
+
+`public/local-seed.json`、`dist/`、`web-dist/`、`.local/` 和数据库均被 Git 忽略。个人版会把本地名单嵌入可执行文件，分发应用即包含名单，请按使用范围保管。初始化仅在数据库完全为空时运行，任何版本更新都不得重新覆盖名单或考勤。
+
+## 数据保存
+
+桌面版通过 Tauri 命令写入 `%APPDATA%/cn.guilu.attendance/attendance.sqlite3`，界面显示实际绝对路径。数据库与程序解压目录分离。SQLite 使用 WAL、FULL 同步和事务；每次写入增加一个完整快照，以版本号拒绝过期写入。单实例插件避免桌面程序重复开启。
+
+浏览器版使用 IndexedDB 的事务快照，与桌面数据互相独立。可以用 JSON 完整备份迁移。界面只有在保存成功后才更新计数；失败会显示错误，原数据不替换。
+
+同一磁盘上的快照不能抵御磁盘故障，因此仍需定期把完整备份保存到其他可靠位置。所有快照保留，长期大量登记时数据库会增长；首版没有自动清理历史。SQLite 文件存在损坏时不自动重建或覆盖。
+
+支持通过 `GUILU_DATA_DIR` 指定绝对数据目录用于隔离验收；日常使用无需设置。测试必须使用 `.local/` 内的新目录，不允许触碰真实用户数据库。
+
+## 目录
+
+| 路径 | 作用 |
+| --- | --- |
+| `src/model.ts`、`src/seed.ts` | 数据约束、北京时区、教学周、初始课表 |
+| `src/storage.ts`、`src/context.tsx` | 桌面/浏览器存储适配与保存状态 |
+| `src/files.ts` | 名单读取、汇总导出、完整备份 |
+| `src/Timetable.tsx` | 周课表与课程编辑 |
+| `src/Attendance.tsx` | 登记、批量登记和个人明细 |
+| `src/Reports.tsx`、`src/Settings.tsx` | 汇总、配置、数据备份 |
+| `src-tauri/src/lib.rs` | SQLite 持久化与 Tauri 命令 |
+| `tests/` | 业务逻辑与端到端测试 |
+| `scripts/` | 打包、本地名单准备和桌面验收 |
+| `wiki_memory/` | 按用户模板建立的工程记忆 |
+
+## 初版边界与依据
+
+初始课表依据用户提供的 2026–2027 第一学期课表和四张截图。开学日期初始为截图中的 2026-09-07，可随时修改；第 9–10 节部分时间为可编辑初始值。只有周次、没有日期节次的实践课程列入备忘，不自动排课。课程支持不连续周次，如 `1-2,4-13`。
+
+界面参考 [Notion 官方 Projects 页面](https://www.notion.com/product/projects) 中的轻量侧栏、表格、留白与低饱和标签，并按桌面宽屏重新组织。Tauri 环境依据 [官方 Windows 前置条件](https://v2.tauri.app/start/prerequisites/)。
+
+首版为单机异常考勤管理，不含多设备同步、完整逐堂点名/出勤率、学校系统自动抓取或自动更新。程序未做商业代码签名。
+
+远程仓库：[ZGL686/-](https://github.com/ZGL686/-.git)。每次完整修改需更新工程日志、完成相关检查、提交并推送。

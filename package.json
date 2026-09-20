@@ -1,0 +1,42 @@
+{
+  "name": "guilu-attendance",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 15473 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 15474",
+    "test": "vitest run tests/model.test.ts",
+    "test:e2e": "playwright test",
+    "tauri": "tauri",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build --no-bundle",
+    "release": "npm run desktop:build && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package.ps1",
+    "roster:seed": "node scripts/prepare-roster.mjs",
+    "format": "prettier --write src tests scripts *.ts *.json",
+    "test:native": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-native.ps1"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.8.0",
+    "@tauri-apps/plugin-dialog": "^2.4.0",
+    "@tauri-apps/plugin-fs": "^2.4.0",
+    "exceljs": "^4.4.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@tauri-apps/cli": "^2.8.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "prettier": "^3.9.8",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0",
+    "vitest": "^3.2.0"
+  }
+}

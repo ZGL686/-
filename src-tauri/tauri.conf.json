@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "归录",
+  "version": "0.1.0",
+  "identifier": "cn.guilu.attendance",
+  "build": {
+    "beforeDevCommand": "npm run dev", "devUrl": "http://localhost:15473",
+    "beforeBuildCommand": "npm run build", "frontendDist": "../web-dist"
+  },
+  "app": {
+    "windows": [{ "title": "归录 · 班级考勤", "width": 1440, "height": 940, "minWidth": 1050, "minHeight": 700, "center": true }],
+    "security": { "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data:; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost 'self'; font-src 'self'; object-src 'none'; base-uri 'self'" }
+  },
+  "bundle": { "active": false, "icon": ["icons/icon.ico"] }
+}

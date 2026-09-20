@@ -1,0 +1,9 @@
+node_modules
+dist
+web-dist
+.local
+public/local-seed.json
+src-tauri/target
+src-tauri/gen
+wiki_memory
+package-lock.json

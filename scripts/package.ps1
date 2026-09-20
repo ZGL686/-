@@ -1,0 +1,31 @@
+﻿$ErrorActionPreference = 'Stop'
+$repoRoot = Split-Path -Parent $PSScriptRoot
+$releaseRoot = [System.IO.Path]::GetFullPath((Join-Path $repoRoot 'dist'))
+$appDir = [System.IO.Path]::GetFullPath((Join-Path $releaseRoot 'GuiLu-latest'))
+$zipPath = [System.IO.Path]::GetFullPath((Join-Path $releaseRoot 'GuiLu-latest.zip'))
+if (-not $appDir.StartsWith($releaseRoot + [System.IO.Path]::DirectorySeparatorChar) -or -not $zipPath.StartsWith($releaseRoot + [System.IO.Path]::DirectorySeparatorChar)) { throw '发布路径越界' }
+$exePath = Join-Path $repoRoot 'src-tauri\target\release\guilu.exe'
+if (-not (Test-Path -LiteralPath $exePath)) { throw '请先执行 npm run desktop:build' }
+New-Item -ItemType Directory -Force -Path $appDir | Out-Null
+# Copy only release-owned files; preserve any extra user files in the extracted directory.
+Copy-Item -LiteralPath $exePath -Destination (Join-Path $appDir '归录.exe') -Force
+Copy-Item -LiteralPath (Join-Path $repoRoot 'docs\使用说明.md') -Destination (Join-Path $appDir '使用说明.md') -Force
+$version = (Get-Content -LiteralPath (Join-Path $repoRoot 'package.json') -Raw | ConvertFrom-Json).version
+$sha = [System.Security.Cryptography.SHA256]::Create()
+try { $hash = [System.BitConverter]::ToString($sha.ComputeHash([System.IO.File]::ReadAllBytes((Join-Path $appDir '归录.exe')))).Replace('-','') } finally { $sha.Dispose() }
+@{version=$version;builtAt=(Get-Date).ToString('o');sha256=$hash;executable='归录.exe'} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $appDir 'version.json') -Encoding UTF8
+# Recreate the archive from the three release files only; never package user databases or backups.
+Add-Type -AssemblyName System.IO.Compression
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$zipTemp = $zipPath + '.tmp'
+$zipStream = [System.IO.File]::Open($zipTemp, [System.IO.FileMode]::Create)
+$archive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create, $false)
+try {
+  foreach($file in @((Join-Path $appDir '归录.exe'),(Join-Path $appDir '使用说明.md'),(Join-Path $appDir 'version.json'))){
+    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $file, [System.IO.Path]::GetFileName($file), [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+  }
+} finally { $archive.Dispose(); $zipStream.Dispose() }
+Move-Item -LiteralPath $zipTemp -Destination $zipPath -Force
+Write-Output "解压版：$appDir"
+Write-Output "压缩包：$zipPath"
+Write-Output "SHA256：$hash"
