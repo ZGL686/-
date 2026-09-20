@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { databaseSchema, defaultDatabase } from './database-schema';
 
 const id = z.string().min(1).max(200);
 const text = z.string().max(2000);
@@ -60,6 +61,10 @@ export const workspaceSchema = z
       .max(12),
     periods: z.array(z.object({ start: time, end: time })).length(10),
     notes: text,
+    databases: z.object({ students: databaseSchema, records: databaseSchema }).default(() => ({
+      students: defaultDatabase('students'),
+      records: defaultDatabase('records'),
+    })),
   })
   .superRefine((w, ctx) => {
     const unique = (vals: string[], label: string) => {
@@ -96,10 +101,15 @@ export const workspaceSchema = z
       if (p.start >= p.end || (i > 0 && p.start < w.periods[i - 1].end))
         ctx.addIssue({ code: 'custom', message: '作息时间需按先后顺序排列，且结束晚于开始' });
     });
+    for (const kind of ['students', 'records'] as const) {
+      const ids = new Set(w[kind].map((r) => r.id));
+      if (Object.keys(w.databases[kind].cells).some((id) => !ids.has(id)))
+        ctx.addIssue({ code: 'custom', message: '数据库属性引用了不存在的记录' });
+    }
   });
-export const dataSchema = z
+const currentDataSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     activeWorkspaceId: id,
     workspaces: z.array(workspaceSchema).min(1),
   })
@@ -109,6 +119,13 @@ export const dataSchema = z
     if (new Set(d.workspaces.map((w) => w.id)).size !== d.workspaces.length)
       ctx.addIssue({ code: 'custom', message: '工作台 ID 重复' });
   });
+// Migration is in memory. Existing snapshots remain intact; the next successful
+// transaction writes v2. v0.1 rejects v2 instead of stripping database properties.
+export const dataSchema = z.preprocess((input) => {
+  if (input && typeof input === 'object' && 'schemaVersion' in input && input.schemaVersion === 1)
+    return { ...input, schemaVersion: 2 };
+  return input;
+}, currentDataSchema);
 export type Student = z.infer<typeof studentSchema>;
 export type Course = z.infer<typeof courseSchema>;
 export type AttendanceRecord = z.infer<typeof recordSchema>;
@@ -232,6 +249,7 @@ export function newWorkspace(name: string, students: Student[] = []): Workspace 
     categories: structuredClone(categories),
     periods: structuredClone(periods),
     notes: '',
+    databases: { students: defaultDatabase('students'), records: defaultDatabase('records') },
   };
 }
 export function importAsCopies(current: AppData, incoming: AppData): AppData {

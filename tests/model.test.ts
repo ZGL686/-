@@ -57,7 +57,7 @@ describe('data and backup integrity', () => {
   });
   it('rejects future schema, orphan records, duplicate student numbers and bad dates', () => {
     const data = sample();
-    expect(() => dataSchema.parse({ ...data, schemaVersion: 2 })).toThrow();
+    expect(() => dataSchema.parse({ ...data, schemaVersion: 3 })).toThrow();
     const w = data.workspaces[0];
     w.students.push({ ...w.students[0], id: 's2' });
     expect(() => dataSchema.parse(data)).toThrow();

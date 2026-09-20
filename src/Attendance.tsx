@@ -494,7 +494,7 @@ function StudentDetail({ student, onClose }: { student: Student; onClose: () => 
     </Modal>
   );
 }
-function RecordEditor({
+export function RecordEditor({
   initial,
   onClose,
   onSave,

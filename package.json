@@ -1,13 +1,13 @@
 {
   "name": "guilu-attendance",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 15473 --strictPort",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 15474",
-    "test": "vitest run tests/model.test.ts",
+    "test": "vitest run tests/model.test.ts tests/database.test.ts",
     "test:e2e": "playwright test",
     "tauri": "tauri",
     "desktop:dev": "tauri dev",

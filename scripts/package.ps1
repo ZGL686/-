@@ -10,18 +10,19 @@ New-Item -ItemType Directory -Force -Path $appDir | Out-Null
 # Copy only release-owned files; preserve any extra user files in the extracted directory.
 Copy-Item -LiteralPath $exePath -Destination (Join-Path $appDir '归录.exe') -Force
 Copy-Item -LiteralPath (Join-Path $repoRoot 'docs\使用说明.md') -Destination (Join-Path $appDir '使用说明.md') -Force
+Copy-Item -LiteralPath (Join-Path $repoRoot 'public\fonts\OFL.txt') -Destination (Join-Path $appDir 'FONT-LICENSE.txt') -Force
 $version = (Get-Content -LiteralPath (Join-Path $repoRoot 'package.json') -Raw | ConvertFrom-Json).version
 $sha = [System.Security.Cryptography.SHA256]::Create()
 try { $hash = [System.BitConverter]::ToString($sha.ComputeHash([System.IO.File]::ReadAllBytes((Join-Path $appDir '归录.exe')))).Replace('-','') } finally { $sha.Dispose() }
 @{version=$version;builtAt=(Get-Date).ToString('o');sha256=$hash;executable='归录.exe'} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $appDir 'version.json') -Encoding UTF8
-# Recreate the archive from the three release files only; never package user databases or backups.
+# Recreate the archive from release-owned files only; never package user databases or backups.
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $zipTemp = $zipPath + '.tmp'
 $zipStream = [System.IO.File]::Open($zipTemp, [System.IO.FileMode]::Create)
 $archive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create, $false)
 try {
-  foreach($file in @((Join-Path $appDir '归录.exe'),(Join-Path $appDir '使用说明.md'),(Join-Path $appDir 'version.json'))){
+  foreach($file in @((Join-Path $appDir '归录.exe'),(Join-Path $appDir '使用说明.md'),(Join-Path $appDir 'version.json'),(Join-Path $appDir 'FONT-LICENSE.txt'))){
     [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive, $file, [System.IO.Path]::GetFileName($file), [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
   }
 } finally { $archive.Dispose(); $zipStream.Dispose() }

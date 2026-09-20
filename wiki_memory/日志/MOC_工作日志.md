@@ -16,6 +16,7 @@ supersedes: null
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
 | 2026-09-20 | feature | 依据用户需求、课表、四张截图和班级学生表构建初版 Windows 考勤应用。 | archived | attendance-initial-release | [[日志/2026-09-20-班级考勤初版.md|2026-09-20｜班级考勤初版]] |
+| 2026-09-20 | feature | 根据用户反馈，进一步查看 Notion 官方 UI 图片和数据库手册，重做色调、布局与数据库交互，改善字体观感。 | archived | notion-database-redesign | [[日志/2026-09-20-Notion界面与数据库改造.md|2026-09-20｜Notion 界面与数据库改造]] |
 
 ## 使用方式
 
