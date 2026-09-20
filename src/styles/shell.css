@@ -1,0 +1,214 @@
+.app-shell {
+  --sidebar-width: 232px;
+  display: grid;
+  grid-template-areas: 'sidebar main';
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  height: 100vh;
+  overflow: hidden;
+  transition: grid-template-columns var(--motion-normal) var(--ease-out);
+}
+.sidebar {
+  grid-area: sidebar;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
+  background: var(--sidebar);
+  border-right: 1px solid var(--line);
+  padding: 14px 8px 8px;
+}
+.app-shell.sidebar-collapsed {
+  grid-template-columns: 0 minmax(0, 1fr);
+}
+.sidebar-collapsed .sidebar {
+  visibility: hidden;
+  padding-inline: 0;
+  border: 0;
+}
+.app-main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+.workspace-switch {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 10px;
+  padding: 7px;
+  margin-bottom: 24px;
+}
+.app-logo {
+  display: block;
+  flex-shrink: 0;
+}
+.workspace-identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+}
+.workspace-identity strong {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.workspace-identity small {
+  font-size: 0.7857rem;
+  color: var(--muted);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.workspace-switch > svg {
+  color: var(--muted);
+}
+.workspace-menu {
+  width: 300px;
+}
+.workspace-option {
+  min-height: 42px;
+  gap: 10px;
+  padding: 8px;
+  text-align: left;
+  white-space: normal;
+}
+.workspace-option > span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.workspace-option > span strong {
+  font-weight: 500;
+}
+.workspace-option > span small {
+  color: var(--muted);
+  font-size: 0.8571rem;
+}
+.workspace-option > svg:last-child:not(:first-child) {
+  margin-left: auto;
+  color: var(--blue);
+}
+.sidebar-caption {
+  padding: 8px 10px;
+  font-size: 0.7857rem;
+  color: #91918e;
+}
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sidebar nav button,
+.sidebar-bottom > button {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  justify-content: flex-start;
+  border: 0;
+  border-radius: 5px;
+  color: #666560;
+  background: none;
+  font-size: 1rem;
+}
+.sidebar nav button:hover,
+.sidebar-bottom > button:hover {
+  background: var(--hover);
+}
+.sidebar nav button.active,
+.sidebar-bottom > button.active {
+  background: #eaeae8;
+  color: #37352f;
+  font-weight: 600;
+}
+.sidebar nav button small {
+  margin-left: auto;
+  font-size: 0.8571rem;
+  color: #9b9a97;
+  font-weight: 400;
+}
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 28px;
+}
+.local-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 18px 10px 6px;
+  color: #91918e;
+  font-size: 0.7857rem;
+}
+.local-status small {
+  margin-left: auto;
+}
+.topbar {
+  min-height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-size: 0.8571rem;
+  color: #6d6b66;
+  gap: 18px;
+}
+.topbar > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+.topbar > div:first-child {
+  flex: 1;
+}
+.topbar .icon-button {
+  margin-right: 3px;
+  flex-shrink: 0;
+}
+.breadcrumb-home {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+.breadcrumb-slash {
+  color: #cecdca;
+  margin: 0 3px;
+}
+.saved-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7857rem;
+  color: #92908a;
+  white-space: nowrap;
+}
+.beijing-clock {
+  font-size: 0.7857rem;
+  color: #92908a;
+  margin-left: 12px;
+  white-space: nowrap;
+}
+.main-scroll {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+.page-content {
+  padding: 40px 48px 56px;
+  max-width: none;
+  margin: 0 auto;
+}

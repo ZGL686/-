@@ -264,3 +264,5 @@ export function importAsCopies(current: AppData, incoming: AppData): AppData {
     activeWorkspaceId: copies[0].id,
   });
 }
+
+export type Session = { date: string; time: string; courseId: string; courseName: string };

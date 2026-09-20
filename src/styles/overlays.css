@@ -1,0 +1,142 @@
+.modal {
+  border: 1px solid #e3e3e1;
+  border-radius: 9px;
+  box-shadow: 0 14px 60px #0003;
+  padding: 25px 28px;
+  width: 560px;
+  max-width: 92vw;
+  max-height: 88vh;
+  overflow: auto;
+  color: #37352f;
+}
+.modal.wide {
+  width: 780px;
+}
+.modal::backdrop {
+  background: #0005;
+}
+.modal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.modal-top p {
+  font-size: 0.9286rem;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.7;
+}
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 15px;
+  font-size: 0.9286rem;
+  color: #666560;
+}
+label small {
+  color: var(--muted);
+  font-size: 0.8571rem;
+  line-height: 1.7;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+.form-grid.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+.form-error {
+  color: #b33b32;
+  font-size: 0.9286rem;
+  line-height: 1.7;
+  padding: 10px 0;
+}
+.check-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9286rem;
+}
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 80vw;
+  z-index: 10000;
+  background: #37352f;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 15px #0002;
+  padding: 11px 14px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.toast.error {
+  background: #88443d;
+  white-space: pre-line;
+}
+.toast > button {
+  border: 0;
+  background: none;
+  color: inherit;
+  min-height: 24px;
+  font-size: 1.4286rem;
+  padding: 0 3px;
+}
+.empty {
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty > span {
+  display: block;
+  margin-bottom: 12px;
+  color: #9b9a97;
+}
+.empty h3 {
+  font-size: 1.1429rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #666560;
+}
+.empty p {
+  font-size: 0.9286rem;
+  line-height: 1.8;
+}
+.empty button {
+  margin-top: 14px;
+}
+.loading,
+.fatal {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 50px;
+  background: #fafaf9;
+  color: var(--muted);
+}
+.fatal p {
+  line-height: 1.8;
+  max-width: 800px;
+}

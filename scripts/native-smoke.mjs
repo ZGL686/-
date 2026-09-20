@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
+import { isolatedEnvironment, verifyNativeIsolation } from './native-isolation.mjs';
 const root = process.cwd();
 const dataDir = path.join(root, '.local', `native-smoke-${Date.now()}`);
 await fs.mkdir(dataDir, { recursive: true });
@@ -65,8 +66,7 @@ let child;
 async function launch() {
   child = spawn(exe, [], {
     env: {
-      ...process.env,
-      GUILU_DATA_DIR: dataDir,
+      ...isolatedEnvironment(dataDir),
       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: '--remote-debugging-port=9333',
     },
     windowsHide: true,
@@ -82,6 +82,7 @@ async function launch() {
     }
   }
   assert(browser, 'Native WebView did not become available');
+  await verifyNativeIsolation(child.pid, dataDir);
   const context = browser.contexts()[0];
   let page = context.pages()[0];
   if (!page) page = await context.waitForEvent('page');
@@ -94,6 +95,13 @@ try {
   let { browser, page } = await launch();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
+  for (let i = 0; i < 3; i++) {
+    await page.getByRole('button', { name: '收起侧栏', exact: true }).click();
+    await page.waitForFunction(
+      () => document.querySelector('.app-main').getBoundingClientRect().width === innerWidth,
+    );
+    await page.getByRole('button', { name: '展开侧栏', exact: true }).click();
+  }
   const initial = await page.evaluate(() => window.__TAURI_INTERNALS__.invoke('load_data'));
   const data = JSON.parse(initial.payload);
   assert.equal(data.workspaces[0].students.length, 2);
@@ -127,7 +135,7 @@ try {
   });
   const { fonts } = await cdp.send('CSS.getPlatformFontsForNode', { nodeId });
   assert(
-    fonts.some((f) => f.isCustomFont && f.postScriptName.startsWith('NotoSansSC')),
+    fonts.some((f) => f.isCustomFont && f.postScriptName.startsWith('LudianRounded')),
     'Offline Chinese font did not render in native WebView',
   );
   await page.screenshot({ path: path.join(dataDir, 'database-desktop.png') });
@@ -166,10 +174,36 @@ try {
   );
   await page.getByRole('navigation').getByRole('button', { name: '课程表', exact: true }).click();
   await page.screenshot({ path: path.join(dataDir, 'desktop.png') });
+  await page.getByRole('button', { name: '设置与偏好', exact: true }).click();
+  await page.getByRole('tab', { name: '外观与交互' }).click();
+  for (const [label, prefix] of [
+    ['简洁黑体', 'NotoSansSC'],
+    ['柔和圆体', 'LudianRounded'],
+    ['手写文楷', 'LudianHand'],
+  ]) {
+    await page.getByRole('radio', { name: new RegExp(label) }).click();
+    await page.evaluate(() => document.fonts.ready);
+    const { root } = await cdp.send('DOM.getDocument');
+    const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector: 'h1' });
+    const { fonts } = await cdp.send('CSS.getPlatformFontsForNode', { nodeId });
+    assert(
+      fonts.some((f) => f.isCustomFont && f.postScriptName.startsWith(prefix)),
+      'Native font did not change: ' + label,
+    );
+  }
+  await page.getByRole('button', { name: '舒适 · 15' }).click();
+  await page.getByLabel('减少动态效果').check();
+  await page.screenshot({ path: path.join(dataDir, 'appearance-desktop.png') });
+  await page.getByRole('button', { name: '收起侧栏', exact: true }).click();
+
   await browser.close();
   child.kill();
   await new Promise((r) => setTimeout(r, 1200));
   ({ browser, page } = await launch());
+  assert.equal(await page.locator('html').getAttribute('data-font'), 'handwritten');
+  assert.equal(await page.locator('html').getAttribute('data-motion'), 'reduced');
+  assert.equal(await page.locator('html').evaluate((el) => getComputedStyle(el).fontSize), '15px');
+  await page.getByRole('button', { name: '展开侧栏', exact: true }).click();
   stored = await page.evaluate(() => window.__TAURI_INTERNALS__.invoke('load_data'));
   assert.equal(stored.revision, 4);
   const finalData = JSON.parse(stored.payload);
@@ -191,6 +225,10 @@ try {
       persistentRecords: 2,
       legacySnapshotRetained: true,
       offlineFont: true,
+      fontsVerified: 3,
+      sidebarRestored: true,
+      preferencesPersisted: true,
+      browserProfileIsolated: true,
       revisions: snapshots.length,
       dataDir,
       exe,

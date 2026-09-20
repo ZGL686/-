@@ -1,5 +1,5 @@
-import { newWorkspace, parseWeeks, uid, dataSchema } from './model';
 import type { AppData, Course, Student } from './model';
+import { dataSchema, newWorkspace, parseWeeks, uid } from './model';
 export function initialData(students: Student[] = [], name = '数字媒体技术班'): AppData {
   const w = newWorkspace(name, students);
   const c = (

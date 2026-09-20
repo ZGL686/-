@@ -1,5 +1,3 @@
-import type { Workspace } from './model';
-import { counts } from './model';
 import type {
   CellValue,
   CustomProperty,
@@ -7,6 +5,8 @@ import type {
   DatabaseView,
   Filter,
 } from './database-schema';
+import type { Workspace } from './model';
+import { counts } from './model';
 export type Property = Omit<CustomProperty, 'type' | 'options'> & {
   type: CustomProperty['type'] | 'title' | 'relation' | 'rollup';
   options?: string[];

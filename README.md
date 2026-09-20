@@ -1,12 +1,14 @@
-# 归录 · 班级考勤
+# Ludian · 班级考勤
 
 面向 Windows 桌面的本地班级考勤应用。使用 React、TypeScript、Vite 和 Tauri 2，提供周课表、异常考勤登记、多工作台、学期汇总与备份恢复。
 
-当前版本 **0.2.0**：按 Notion 官方界面和数据库手册重做灰白布局，新增学生 / 考勤数据库。支持表格、看板、画廊、列表、日历、保存视图、AND/OR 筛选、多级排序、分组、自定义属性、批量编辑、右侧详情及关联汇总。离线内置 Noto Sans SC 字体，避免依赖设备字体版本。
+当前版本 **0.3.0**：品牌改为 Ludian 和黑白 L 图标。修复收起侧栏导致主区域宽度为零的白屏；左上角统一为班级切换入口。提供圆体、手写、黑体和系统字体，支持字号与减少动态效果。公共按钮、图标提示、菜单、弹窗、抽屉统一反馈；页面错误可恢复。
+
+保留表格、看板、画廊、列表、日历、保存视图、自定义属性、筛选排序、批量编辑和关联汇总。更名不会改变原数据目录、备份格式或已有记录。
 
 ## 使用
 
-本机构建完成后，直接打开 `dist/GuiLu-latest/归录.exe`，或将 `dist/GuiLu-latest.zip` 解压后运行。运行环境为 Windows 10/11 x64，需要 Microsoft Edge WebView2 Runtime。
+本机构建完成后，直接打开 `dist/Ludian-latest/Ludian.exe`，或将 `dist/Ludian-latest.zip` 解压后运行。运行环境为 Windows 10/11 x64，需要 Microsoft Edge WebView2 Runtime。
 
 - 课程表按北京时间显示当前周，支持周次切换、课程详情、添加和编辑课程。
 - 点击学生对应类型下的 `+`，登记一次请假、旷课、迟到或早退。每条记录保存日期、时间、课程快照与备注。
@@ -20,14 +22,15 @@
 
 ## 开发
 
-需要 Node.js 22.12+、Rust MSVC、Visual Studio C++ Build Tools、Windows SDK 和 WebView2。依赖锁定在 `package-lock.json` 和 `src-tauri/Cargo.lock`。
+建议 Node.js 24 LTS（质量检查至少需要 22.13+）、Rust MSVC、Visual Studio C++ Build Tools、Windows SDK 和 WebView2。依赖锁定在 `package-lock.json` 和 `src-tauri/Cargo.lock`。
 
 ```powershell
 npm ci
 npm run dev
 # http://127.0.0.1:15473
 npm run desktop:dev
-npm run test
+npm run check
+npm test
 npm run test:e2e
 cargo test --manifest-path src-tauri/Cargo.toml --lib
 npm run test:native
@@ -36,7 +39,7 @@ npm run release
 
 浏览器测试默认使用本机 Microsoft Edge。Vite 固定为 15473 端口，并忽略 Rust 构建目录，避免 Windows 文件占用导致监听失败。
 
-桌面验收使用 Node 内置 SQLite 创建虚构学生的旧版快照，单独构建 Debug 版本，并用本机 9333 调试端口连接 WebView2。验证升级、旧快照保留、新视图、离线字体、原生保存对话框及退出重启。测试完成关闭应用；发行版不会开启此端口。
+桌面验收使用 Node 内置 SQLite 创建虚构学生的旧版快照，单独构建 Debug 版本，并用本机 9333 调试端口连接 WebView2。同时隔离 SQLite 和 WebView2 缓存，写入前校验实际目录。验证升级、旧快照保留、新视图、三种离线字体、侧栏收展、字体 / 字号 / 动效偏好、原生保存对话框及退出重启。测试完成关闭应用；发行版不会开启此端口。
 
 ## 本地名单与仓库边界
 
@@ -59,7 +62,7 @@ npm run release
 
 数据 schema 现为 2；版本 1 在内存中兼容升级，首次成功写入才产生版本 2 快照，原快照保留。新版备份包含所有视图、属性与单元格。旧程序会拒绝读取新版数据，避免静默丢弃新字段。
 
-支持通过 `GUILU_DATA_DIR` 指定绝对数据目录用于隔离验收；日常使用无需设置。测试必须使用 `.local/` 内的新目录，不允许触碰真实用户数据库。
+支持通过 `GUILU_DATA_DIR` 指定绝对数据目录用于隔离验收；日常使用无需设置。桌面测试还必须通过 `WEBVIEW2_USER_DATA_FOLDER` 隔离浏览器缓存 / 偏好，使用 `.local/` 内的新目录，并校验 WebView 子进程的实际路径。不允许触碰真实用户数据库。Tauri JSON 的 `dataDirectory` 只接受相对路径，不能用绝对路径代替此运行时隔离。
 
 ## 目录
 
@@ -70,9 +73,11 @@ npm run release
 | `src/files.ts` | 名单读取、汇总导出、完整备份 |
 | `src/Timetable.tsx` | 周课表与课程编辑 |
 | `src/Attendance.tsx` | 登记、批量登记和个人明细 |
-| `src/Database.tsx`、`DatabaseMenus.tsx`、`DatabaseDetail.tsx` | 五种数据库视图、配置、属性编辑和关联详情 |
+| `src/features/database/` | 数据库页面协调、表格 / 卡片 / 多布局、配置、关联详情与操作 |
 | `src/database-schema.ts`、`database-engine.ts` | 属性类型、保存视图、查询排序、分组、列计算与关联汇总 |
-| `src/Reports.tsx`、`src/Settings.tsx` | 汇总、配置、数据备份 |
+| `src/Reports.tsx`、`src/features/settings/` | 汇总、学期配置、数据备份及名单导入 |
+| `src/app/`、`src/components/ui/` | 导航元信息、应用外壳、班级切换与公共 UI |
+| `src/preferences/`、`src/styles/` | 设备偏好、字体、设计变量和按职责拆分的样式 |
 | `src-tauri/src/lib.rs` | SQLite 持久化与 Tauri 命令 |
 | `tests/` | 业务逻辑与端到端测试 |
 | `scripts/` | 打包、本地名单准备和桌面验收 |
@@ -84,7 +89,7 @@ npm run release
 
 界面和数据库行为参考 Notion 官方多张产品截图与 [视图、筛选和排序手册](https://www.notion.com/help/views-filters-and-sorts)。来源、实际映射和实现边界见 [设计参考](docs/设计参考.md)。Tauri 环境依据 [官方 Windows 前置条件](https://v2.tauri.app/start/prerequisites/)。
 
-0.2.0 的独立验收记录见 [验收记录](docs/验收记录-0.2.0.md)。内置字体遵循 SIL OFL 1.1，许可与来源见 [字体说明](public/fonts/README.md)。
+0.3.0 的验收记录见 [本轮验收](docs/验收记录-0.3.0.md)，前版记录保留。模块边界、质量命令和交互约定见 [架构与交互规范](docs/架构与交互规范.md)。内置字体遵循 SIL OFL 1.1，许可与来源见 [字体说明](public/fonts/README.md)。
 
 首版为单机异常考勤管理，不含多设备同步、完整逐堂点名/出勤率、学校系统自动抓取或自动更新。程序未做商业代码签名。
 

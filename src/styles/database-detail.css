@@ -1,0 +1,137 @@
+.database-peek {
+  position: fixed;
+  right: 0;
+  top: 45px;
+  bottom: 0;
+  width: min(630px, 70vw);
+  background: white;
+  border-left: 1px solid #e3e3e1;
+  box-shadow: -7px 0 24px #0000000d;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+}
+.peek-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 45px;
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.8571rem;
+  color: var(--muted);
+}
+.peek-top > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.peek-content {
+  padding: 30px 34px 50px;
+  overflow: auto;
+}
+.peek-icon {
+  color: #787774;
+  margin-bottom: 18px;
+}
+.peek-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+.peek-properties {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.peek-property {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  font-size: 1rem;
+}
+.peek-property > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  padding: 7px 0;
+  font-size: 0.9286rem;
+}
+.peek-value {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.peek-value .cell-button {
+  white-space: normal;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.relation-link {
+  background: none;
+  border: 0;
+  justify-content: flex-start;
+  padding: 7px;
+  color: #37352f;
+  text-decoration: underline;
+  text-decoration-color: #dededc;
+  text-underline-offset: 3px;
+}
+.peek-related {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.peek-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.peek-section-title h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.peek-section-title h3 > span {
+  font-size: 0.9286rem;
+  color: #9b9a97;
+  font-weight: 400;
+}
+.related-record {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: flex-start;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+  white-space: normal;
+  text-align: left;
+}
+.related-record > svg {
+  color: #9b9a97;
+  flex-shrink: 0;
+}
+.related-record > span:not(.tag) {
+  flex: 1;
+  font-size: 1rem;
+}
+.related-record small {
+  display: block;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.peek-hint {
+  font-size: 0.9286rem;
+  line-height: 1.8;
+  margin: 15px 0;
+}

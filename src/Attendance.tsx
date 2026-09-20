@@ -1,23 +1,23 @@
-import { useState } from 'react';
 import {
-  Search,
-  Plus,
-  SlidersHorizontal,
-  Users,
-  Clock3,
   ArrowUpRight,
-  FileText,
-  Undo2,
-  Pencil,
   Check,
   CheckSquare,
+  Clock3,
+  FileText,
+  Pencil,
+  Plus,
+  Search,
+  SlidersHorizontal,
   Square,
+  Undo2,
+  Users,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Button, Empty, IconButton, Modal, PageHeading, Tag } from './components/ui';
 import { useApp } from './context';
-import { beijingNow, counts, matchCourse, uid, coursesOn } from './model';
-import type { Student, AttendanceRecord } from './model';
-import type { Session } from './Timetable';
-import { PageHeading, Modal, Tag, Empty } from './ui';
+import { RecordEditor } from './features/attendance/RecordEditor';
+import type { AttendanceRecord, Session, Student } from './model';
+import { beijingNow, counts, coursesOn, matchCourse, uid } from './model';
 export function Attendance({ session, onReports }: { session?: Session; onReports: () => void }) {
   const { w, update, busy, notify } = useApp();
   const now = beijingNow();
@@ -79,19 +79,18 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
   return (
     <>
       <PageHeading
-        eyebrow="把每一次出勤，认真记录"
-        title="考勤工作台"
+        page="attendance"
         description={`${w.name} · ${w.students.length} 位同学 · ${w.term}`}
         actions={
           <>
-            <button onClick={onReports}>
+            <Button onClick={onReports}>
               <FileText size={16} />
               查看汇总
-            </button>
-            <button className="primary" onClick={() => setManual(true)}>
+            </Button>
+            <Button className="primary" onClick={() => setManual(true)}>
               <Plus size={16} />
               补记考勤
-            </button>
+            </Button>
           </>
         }
       />
@@ -156,7 +155,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
               </optgroup>
             </select>
           </label>
-          <button
+          <Button
             className="small"
             onClick={() => {
               const now = beijingNow();
@@ -166,7 +165,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
             }}
           >
             匹配当前课程
-          </button>
+          </Button>
         </div>
         {!context.courseId && (
           <label className="temporary-course">
@@ -190,13 +189,13 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
       </div>
       <div className="table-toolbar">
         <div className="tabs">
-          <button className={!onlyRecords ? 'active' : ''} onClick={() => setOnlyRecords(false)}>
+          <Button className={!onlyRecords ? 'active' : ''} onClick={() => setOnlyRecords(false)}>
             <Users size={16} />
             全部同学<span>{w.students.length}</span>
-          </button>
-          <button className={onlyRecords ? 'active' : ''} onClick={() => setOnlyRecords(true)}>
+          </Button>
+          <Button className={onlyRecords ? 'active' : ''} onClick={() => setOnlyRecords(true)}>
             有考勤记录
-          </button>
+          </Button>
         </div>
         <div className="toolbar-right">
           <div className="search-box">
@@ -208,17 +207,17 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-          <button className="small" disabled={!selected.length} onClick={() => setBatch(true)}>
+          <Button className="small" disabled={!selected.length} onClick={() => setBatch(true)}>
             <SlidersHorizontal size={15} />
             批量登记{selected.length > 0 ? ` (${selected.length})` : ''}
-          </button>
+          </Button>
         </div>
       </div>
       {lastIds.length > 0 && (
         <div className="undo-bar">
           <Check size={15} />
           最近登记已保存
-          <button
+          <Button
             onClick={async () => {
               if (
                 await update((w) => {
@@ -236,7 +235,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
           >
             <Undo2 size={14} />
             撤销
-          </button>
+          </Button>
         </div>
       )}
       <div className="table-container">
@@ -244,7 +243,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
           <thead>
             <tr>
               <th className="check-cell">
-                <button
+                <Button
                   className="checkbox-button"
                   aria-label="选择全部筛选同学"
                   onClick={() =>
@@ -260,7 +259,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                   ) : (
                     <Square size={17} />
                   )}
-                </button>
+                </Button>
               </th>
               <th>
                 姓名 <span className="header-light">Aa</span>
@@ -295,10 +294,10 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                     />
                   </td>
                   <td>
-                    <button className="student-name" onClick={() => setStudent(s)}>
+                    <Button className="student-name" onClick={() => setStudent(s)}>
                       <span className={`avatar avatar-${i % 5}`}>{s.name.slice(-2)}</span>
                       <strong>{s.name}</strong>
-                    </button>
+                    </Button>
                   </td>
                   <td className="student-number">{s.number}</td>
                   {w.categories.map((c) => (
@@ -307,14 +306,14 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                         <span className={cs[c.id] ? `count-value ${c.color}` : 'zero'}>
                           {cs[c.id] || '—'}
                         </span>
-                        <button
+                        <Button
                           aria-label={`${s.name}${c.label}加一`}
                           title={`登记一次${c.label}`}
                           disabled={busy}
                           onClick={() => add([s.id], c.id)}
                         >
                           <Plus size={13} />
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   ))}
@@ -322,13 +321,9 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                     {Object.values(cs).reduce((a, b) => a + b, 0) || '—'}
                   </td>
                   <td>
-                    <button
-                      className="icon-button"
-                      aria-label={`查看${s.name}明细`}
-                      onClick={() => setStudent(s)}
-                    >
+                    <IconButton label={`查看${s.name}明细`} onClick={() => setStudent(s)}>
                       <ArrowUpRight size={15} />
-                    </button>
+                    </IconButton>
                   </td>
                 </tr>
               );
@@ -375,10 +370,10 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
           </div>
           <div className="category-actions">
             {w.categories.map((c) => (
-              <button disabled={busy} key={c.id} onClick={() => add(selected, c.id)}>
+              <Button disabled={busy} key={c.id} onClick={() => add(selected, c.id)}>
                 <Tag color={c.color}>{c.label}</Tag>
                 <Plus size={14} />
-              </button>
+              </Button>
             ))}
           </div>
         </Modal>
@@ -443,15 +438,10 @@ function StudentDetail({ student, onClose }: { student: Student; onClose: () => 
             <Tag color={w.categories.find((c) => c.id === r.category)?.color}>
               {r.voided ? '已撤销' : w.categories.find((c) => c.id === r.category)?.label}
             </Tag>
-            <button
-              className="icon-button"
-              aria-label="编辑记录"
-              disabled={r.voided}
-              onClick={() => setEditing(r)}
-            >
+            <IconButton label="编辑记录" disabled={r.voided} onClick={() => setEditing(r)}>
               <Pencil size={15} />
-            </button>
-            <button
+            </IconButton>
+            <Button
               className="text-button"
               disabled={busy}
               onClick={() =>
@@ -466,7 +456,7 @@ function StudentDetail({ student, onClose }: { student: Student; onClose: () => 
               }
             >
               {r.voided ? '恢复' : '撤销'}
-            </button>
+            </Button>
           </div>
         ))}
         {!records.length && (
@@ -491,154 +481,6 @@ function StudentDetail({ student, onClose }: { student: Student; onClose: () => 
           }}
         />
       )}
-    </Modal>
-  );
-}
-export function RecordEditor({
-  initial,
-  onClose,
-  onSave,
-}: {
-  initial: Partial<AttendanceRecord>;
-  onClose: () => void;
-  onSave: (r: AttendanceRecord) => Promise<void>;
-}) {
-  const { w, busy } = useApp();
-  const now = beijingNow();
-  const [r, setR] = useState<AttendanceRecord>({
-    id: uid(),
-    studentId: w.students[0]?.id ?? '',
-    category: w.categories[0].id,
-    ...now,
-    courseId: '',
-    courseName: '',
-    room: '',
-    teacher: '',
-    note: '',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    voided: false,
-    ...initial,
-  });
-  const field = (key: keyof AttendanceRecord, value: string) => setR({ ...r, [key]: value });
-  return (
-    <Modal
-      title={initial.id ? '修改考勤明细' : '补记考勤'}
-      subtitle="调课或补记时，可以手动调整时间与课程。"
-      onClose={onClose}
-    >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          void onSave({ ...r, updatedAt: new Date().toISOString() });
-        }}
-      >
-        <div className="form-grid">
-          <label>
-            同学
-            <select
-              required
-              value={r.studentId}
-              onChange={(e) => field('studentId', e.target.value)}
-            >
-              {w.students.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name} · {s.number}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            考勤类型
-            <select value={r.category} onChange={(e) => field('category', e.target.value)}>
-              {w.categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="form-grid">
-          <label>
-            日期
-            <input
-              required
-              type="date"
-              value={r.date}
-              onChange={(e) => field('date', e.target.value)}
-            />
-          </label>
-          <label>
-            北京时间
-            <input
-              required
-              type="time"
-              value={r.time}
-              onChange={(e) => field('time', e.target.value)}
-            />
-          </label>
-        </div>
-        <label>
-          从课表选择
-          <select
-            value={r.courseId}
-            onChange={(e) => {
-              const c = w.courses.find((c) => c.id === e.target.value);
-              setR({
-                ...r,
-                courseId: c?.id ?? '',
-                courseName: c?.name ?? r.courseName,
-                teacher: c?.teacher ?? '',
-                room: c?.room ?? '',
-              });
-            }}
-          >
-            <option value="">手动填写</option>
-            {w.courses.map((c) => (
-              <option value={c.id} key={c.id}>
-                {c.name} · 周{c.day} · {c.start}–{c.end} 节
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          课程名称
-          <input
-            required
-            maxLength={200}
-            value={r.courseName}
-            onChange={(e) => field('courseName', e.target.value)}
-          />
-        </label>
-        <div className="form-grid">
-          <label>
-            教师
-            <input value={r.teacher} onChange={(e) => field('teacher', e.target.value)} />
-          </label>
-          <label>
-            教室
-            <input value={r.room} onChange={(e) => field('room', e.target.value)} />
-          </label>
-        </div>
-        <label>
-          备注
-          <textarea
-            rows={3}
-            maxLength={2000}
-            value={r.note}
-            onChange={(e) => field('note', e.target.value)}
-          />
-        </label>
-        <div className="modal-actions">
-          <button type="button" onClick={onClose}>
-            取消
-          </button>
-          <button className="primary" disabled={busy || !w.students.length}>
-            保存考勤
-          </button>
-        </div>
-      </form>
     </Modal>
   );
 }

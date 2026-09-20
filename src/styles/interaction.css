@@ -1,0 +1,265 @@
+/* Shared feedback: never animate text size or use transition: all. */
+button,
+.file-button,
+input,
+select,
+textarea {
+  transition:
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease,
+    opacity var(--motion-fast) ease;
+}
+button:not(:disabled):active {
+  background-color: var(--pressed);
+  box-shadow: inset 0 1px 2px #00000010;
+}
+button.primary:not(:disabled):active {
+  background-color: #1265b4;
+}
+button:focus-visible,
+.file-button:focus-within {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+button:disabled {
+  pointer-events: none;
+}
+button > svg,
+.workspace-switch > svg {
+  transition:
+    transform var(--motion-fast) var(--ease-out),
+    color var(--motion-fast) ease;
+  flex-shrink: 0;
+}
+.icon-button:not(:disabled):hover > svg {
+  transform: translateY(-1px);
+  color: #37352f;
+}
+.icon-button:not(:disabled):active > svg {
+  transform: scale(0.9);
+}
+.sidebar nav button:not(:disabled):hover > svg {
+  transform: translateX(2px);
+}
+.text-link:hover > svg,
+.relation-link:hover > svg:last-child {
+  transform: translate(1px, -1px);
+}
+.workspace-switch .chevron-open {
+  transform: rotate(180deg);
+}
+.course-card,
+.database-card {
+  transition:
+    border-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease,
+    background-color var(--motion-fast) ease;
+}
+.course-card:hover,
+.database-card:hover {
+  box-shadow: 0 2px 8px #0000000c;
+  border-color: #bbb9b4;
+}
+.database-card.dragging {
+  opacity: 0.45;
+}
+.board-column {
+  transition:
+    background-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease;
+  border-radius: 7px;
+}
+.board-column.drop-target {
+  background: #eef6fe;
+  box-shadow: inset 0 0 0 2px #2383e2;
+}
+.database-table th.drop-target {
+  box-shadow: inset 3px 0 var(--blue);
+  background: #edf5fd;
+}
+.database-row-title > span {
+  transition: opacity var(--motion-fast) ease;
+}
+.database-row-title:focus-visible > span {
+  opacity: 1;
+}
+.ui-popover {
+  z-index: 120;
+  min-width: 220px;
+  max-width: min(340px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow-popover);
+  animation: pop-in var(--motion-fast) var(--ease-out);
+}
+.ui-popover > button {
+  width: 100%;
+  justify-content: flex-start;
+  border: 0;
+  background: none;
+}
+.ui-popover > button:hover {
+  background: var(--hover);
+}
+.popover-caption {
+  font-size: 0.8571rem;
+  color: var(--muted);
+  padding: 6px 8px;
+}
+.popover-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 5px 0;
+}
+.ui-tooltip {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  transform: translateX(-50%);
+  background: #37352f;
+  color: #fff;
+  font-size: 0.8571rem;
+  padding: 5px 9px;
+  border-radius: 5px;
+  max-width: 220px;
+  box-shadow: 0 3px 9px #0002;
+  animation: tooltip-in var(--motion-fast) ease;
+}
+.ui-tooltip.above {
+  transform: translate(-50%, -100%);
+}
+.modal[open] {
+  animation: dialog-in var(--motion-normal) var(--ease-out);
+}
+.modal::backdrop {
+  animation: fade-in var(--motion-normal) ease;
+}
+.ui-drawer {
+  animation: drawer-in var(--motion-slow) var(--ease-out);
+}
+.ui-drawer.is-closing {
+  animation: drawer-out 150ms ease-in forwards;
+  pointer-events: none;
+}
+.toast {
+  animation: toast-in var(--motion-normal) var(--ease-out);
+}
+.pending-icon {
+  animation: spin 900ms linear infinite;
+}
+.save-failed {
+  color: #b6463d;
+}
+.is-saving {
+  color: var(--blue);
+}
+.page-error {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: var(--muted);
+}
+.error-actions {
+  display: flex;
+  gap: 10px;
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes drawer-in {
+  from {
+    opacity: 0.3;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes drawer-out {
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 0 7px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+:root[data-motion='reduced'] button:hover > svg,
+:root[data-motion='reduced'] button:active > svg {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  button:hover > svg,
+  button:active > svg {
+    transform: none !important;
+  }
+}

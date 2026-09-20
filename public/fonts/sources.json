@@ -1,0 +1,26 @@
+[
+  {
+    "file": "rounded-regular.woff2",
+    "source": "https://github.com/lxgw/975Yuan/releases/download/26.07.26/LXGW975YuanSC-400W.ttf",
+    "sourceSha256": "d14f5a453a221525f0db4887412712cbc03a84d0dc44ce2d22d51d1c136ed9a1",
+    "sha256": "910cb6e7a1a739960e0f48c549f66f01d988efdecf26c1416c869cd1d648b41f",
+    "characters": 30912,
+    "family": "Ludian Rounded"
+  },
+  {
+    "file": "rounded-bold.woff2",
+    "source": "https://github.com/lxgw/975Yuan/releases/download/26.07.26/LXGW975YuanSC-700W.ttf",
+    "sourceSha256": "f392de4cba941f3c44c7770cfed7ac3c658b46b7e3a4b2546fe155010109d403",
+    "sha256": "d3f1530d6a6a858181bfebe43541f9691138c19fb426ab9291238ba80a1f794d",
+    "characters": 30912,
+    "family": "Ludian Rounded"
+  },
+  {
+    "file": "handwritten.woff2",
+    "source": "https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.522/LXGWWenKaiGBScreen.ttf",
+    "sourceSha256": "23ec023913e1851925eb94462c4b0ccd1d78bb89533745aaa8cc682ccd339dc0",
+    "sha256": "cb888d7e138323fd7db7d7b4b9ddd3faf1a2513c11ea405f77c0bdaeca8a9e25",
+    "characters": 47449,
+    "family": "Ludian Hand"
+  }
+]

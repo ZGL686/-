@@ -1,0 +1,56 @@
+export const fontOptions = [
+  {
+    id: 'rounded',
+    name: '柔和圆体',
+    detail: '圆润、轻松 · 源自 975 圆体',
+    family: 'Ludian Rounded',
+  },
+  {
+    id: 'handwritten',
+    name: '手写文楷',
+    detail: '自然的书写感 · 源自霞鹜文楷',
+    family: 'Ludian Hand',
+  },
+  { id: 'sans', name: '简洁黑体', detail: '清晰、规整 · Noto Sans SC', family: 'GuiLu Sans' },
+  { id: 'system', name: '系统字体', detail: '使用电脑上的默认界面字体', family: 'system-ui' },
+] as const;
+export type FontId = (typeof fontOptions)[number]['id'];
+export type Preferences = {
+  version: 1;
+  font: FontId;
+  fontSize: 14 | 15 | 16;
+  motion: 'system' | 'reduced';
+  sidebarCollapsed: boolean;
+};
+export const preferenceKey = 'ludian.preferences.v1';
+export const defaultPreferences: Preferences = {
+  version: 1,
+  font: 'rounded',
+  fontSize: 14,
+  motion: 'system',
+  sidebarCollapsed: false,
+};
+
+// Preferences never enter attendance snapshots or imports. Invalid fields fall
+// back individually, so a malformed preference cannot prevent opening records.
+export function parsePreferences(raw: string | null): Preferences {
+  try {
+    const p: unknown = JSON.parse(raw ?? 'null');
+    if (!p || typeof p !== 'object' || !('version' in p) || p.version !== 1)
+      return { ...defaultPreferences };
+    const value = p as Record<string, unknown>;
+    return {
+      version: 1,
+      font: fontOptions.some((f) => f.id === value.font)
+        ? (value.font as FontId)
+        : defaultPreferences.font,
+      fontSize: [14, 15, 16].includes(value.fontSize as number)
+        ? (value.fontSize as Preferences['fontSize'])
+        : 14,
+      motion: value.motion === 'reduced' ? 'reduced' : 'system',
+      sidebarCollapsed: value.sidebarCollapsed === true,
+    };
+  } catch {
+    return { ...defaultPreferences };
+  }
+}

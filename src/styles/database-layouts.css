@@ -1,0 +1,226 @@
+.database-group {
+  margin-top: 15px;
+}
+.group-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: none;
+  justify-content: flex-start;
+  font-size: 0.9286rem;
+  margin: 4px 0 8px;
+  color: var(--muted);
+}
+.group-heading .closed {
+  transform: rotate(-90deg);
+}
+.database-board {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  align-items: flex-start;
+  padding: 16px 0 20px;
+}
+.board-column {
+  flex: 0 0 260px;
+  min-width: 220px;
+  background: #f7f7f5;
+  border-radius: 5px;
+  padding: 8px;
+  min-height: 190px;
+}
+.board-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 3px;
+  font-size: 0.9286rem;
+  color: #9b9a97;
+}
+.board-heading .icon-button {
+  margin-left: auto;
+}
+.database-card {
+  background: white;
+  border: 1px solid #e6e6e4;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px #00000009;
+  overflow: hidden;
+}
+.database-card[draggable='true'] {
+  cursor: grab;
+}
+.board-column .database-card {
+  margin-bottom: 8px;
+}
+.database-card-title {
+  border: 0;
+  width: 100%;
+  padding: 12px 12px 6px;
+  justify-content: flex-start;
+  white-space: normal;
+  text-align: left;
+  align-items: flex-start;
+  min-height: 38px;
+  font-size: 1rem;
+  background: none;
+}
+.database-card-title strong {
+  font-weight: 500;
+  line-height: 1.6;
+}
+.database-card-title svg {
+  color: #91918e;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.card-properties {
+  padding: 4px 13px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.card-properties > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.9286rem;
+  overflow: hidden;
+}
+.card-property-name {
+  min-width: 58px;
+  font-size: 0.8571rem;
+  color: #9b9a97;
+  flex-shrink: 0;
+}
+.card-properties .cell-empty {
+  font-size: 0.8571rem;
+}
+.empty-column {
+  text-align: center;
+  color: #b2b2af;
+  font-size: 0.8571rem;
+  padding: 30px 8px;
+}
+.database-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+  padding: 18px 0;
+}
+.database-gallery .database-card {
+  min-height: 155px;
+}
+.database-gallery .database-card-title {
+  font-size: 1.1429rem;
+  padding-top: 16px;
+  padding-bottom: 10px;
+}
+.database-list-row {
+  display: flex;
+  justify-content: flex-start;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  width: 100%;
+  gap: 16px;
+  padding: 10px 6px;
+  background: none;
+}
+.database-list-row > strong {
+  margin-right: auto;
+  min-width: 160px;
+  font-weight: 500;
+  text-align: left;
+}
+.database-list-row > span {
+  font-size: 0.9286rem;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--muted);
+}
+.database-list {
+  overflow: auto;
+}
+.database-calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 20px 0 13px;
+}
+.database-calendar-toolbar h3 {
+  margin-right: auto;
+}
+.database-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+.month-weekday {
+  padding: 8px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8571rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.month-day {
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  min-height: 125px;
+  padding: 7px;
+  overflow: hidden;
+}
+.month-day > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8571rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.month-day.outside {
+  background: #fafaf9;
+}
+.month-day.outside > span {
+  color: #b8b8b5;
+}
+.month-day > .today-date {
+  background: #2383e2;
+  color: white;
+  border-radius: 50%;
+}
+.calendar-record {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+  font-size: 0.8571rem;
+  text-align: left;
+  padding: 4px 5px;
+  min-height: 27px;
+  border-color: #e9e9e7;
+  box-shadow: 0 1px 2px #00000009;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.calendar-record svg {
+  flex-shrink: 0;
+  color: #9b9a97;
+}
+.undated-records {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f7f7f5;
+}
+.undated-records h4 {
+  margin-bottom: 10px;
+  color: var(--muted);
+}

@@ -1,0 +1,334 @@
+.overview-strip {
+  display: flex;
+  gap: 28px;
+  padding: 0 0 20px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.overview-strip > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9286rem;
+}
+.overview-strip strong {
+  font-size: 1.0714rem;
+  color: #37352f;
+  font-weight: 600;
+}
+.overview-strip small {
+  font-weight: 400;
+  margin-left: 4px;
+  color: var(--muted);
+}
+.overview-strip .strip-note {
+  margin-left: auto;
+  font-size: 0.8571rem;
+}
+.schedule-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.schedule-section {
+  min-width: 0;
+}
+.section-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 13px;
+}
+.week-navigation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.week-title {
+  border: 0;
+  background: none;
+  font-size: 1.1429rem;
+  font-weight: 600;
+  padding: 4px;
+}
+.week-title > span {
+  color: #9b9a97;
+}
+.date-range {
+  font-size: 0.9286rem;
+  margin-left: 10px;
+}
+.calendar {
+  display: grid;
+  grid-template-columns: 58px repeat(7, minmax(95px, 1fr));
+  grid-template-rows: 56px repeat(10, 60px);
+  border: 1px solid var(--line);
+  border-right: 0;
+  position: relative;
+  isolation: isolate;
+  min-width: 760px;
+}
+.calendar-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 0.8571rem;
+}
+.day-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9286rem;
+}
+.day-heading b {
+  font-size: 1.2143rem;
+  font-weight: 500;
+  color: #37352f;
+}
+.day-heading.today b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2383e2;
+  color: white;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+}
+.day-heading i {
+  display: none;
+}
+.period-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+  color: #91918e;
+  line-height: 1.3;
+}
+.period-label b {
+  font-size: 0.9286rem;
+  font-weight: 500;
+  color: #787774;
+  margin-bottom: 2px;
+}
+.period-label span {
+  font-size: 0.7857rem;
+}
+.calendar-cell {
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.calendar-cell.weekend {
+  background: #fafaf9;
+}
+.calendar-cell.afternoon {
+  border-top: 2px solid #dededb;
+}
+.today-col {
+  background: #fbfcfd;
+}
+.course-card {
+  z-index: 1;
+  margin: 4px;
+  border: 1px solid #e5e5e3;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 9px 9px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+  overflow: hidden;
+  background: white;
+  gap: 6px;
+  box-shadow: 0 1px 2px #00000008;
+}
+.course-card:hover {
+  background: var(--tint);
+}
+.course-card strong {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #37352f;
+}
+.course-card > span {
+  font-size: 0.8571rem;
+  color: #787774;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.course-card > small {
+  font-size: 0.8571rem;
+  color: #787774;
+  margin-top: auto;
+}
+.calendar-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+  color: #91918e;
+  font-size: 0.8571rem;
+}
+.calendar-footer > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tiny-square {
+  width: 7px;
+  height: 7px;
+  background: #d3d3d0;
+  border-radius: 1px;
+}
+.daily-panel {
+  display: grid;
+  grid-template-columns: 180px minmax(170px, 1fr) 160px minmax(240px, 1.5fr);
+  gap: 16px;
+  align-items: start;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.daily-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #787774;
+  flex-shrink: 0;
+}
+.daily-title p {
+  font-size: 0.8571rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.day-off {
+  text-align: left;
+  color: var(--muted);
+}
+.rest-illustration {
+  display: none;
+}
+.day-off h3 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.day-off p {
+  font-size: 0.9286rem;
+  line-height: 1.6;
+  margin-top: 5px;
+}
+.day-off br {
+  display: none;
+}
+.daily-panel .full-width {
+  font-size: 0.9286rem;
+}
+.aside-divider,
+.local-tip {
+  display: none;
+}
+.aside-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-column: 4;
+  grid-row: 1;
+}
+.memo {
+  white-space: pre-line;
+  font-size: 0.9286rem;
+  line-height: 1.9;
+  color: #787774;
+  grid-column: 4;
+  grid-row: 2 / span 2;
+  margin-top: -22px;
+}
+.daily-panel > .text-link {
+  grid-column: 4;
+}
+.today-course {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: normal;
+  border: 0;
+  background: #f7f7f5;
+  position: relative;
+  padding: 10px 12px;
+  grid-column: 2;
+}
+.today-course > svg {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+.today-course strong {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.today-course small,
+.today-course > span {
+  font-size: 0.8571rem;
+  color: #787774;
+}
+.color-line {
+  display: none;
+}
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.week-grid button.selected {
+  background: #e7f3ff;
+  color: #2383e2;
+  border-color: #85b9ed;
+}
+.course-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 25px 0;
+}
+.course-detail p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.course-detail .tag {
+  align-self: flex-start;
+}
+.color-picker {
+  display: flex;
+  gap: 10px;
+}
+.swatch {
+  background: var(--tint);
+  border: 2px solid transparent;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  padding: 0;
+  min-height: 28px;
+}
+.swatch.chosen {
+  border-color: var(--accent);
+}

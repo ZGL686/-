@@ -1,6 +1,6 @@
-import { isTauri, invoke } from '@tauri-apps/api/core';
-import { dataSchema } from './model';
+import { invoke, isTauri } from '@tauri-apps/api/core';
 import type { AppData } from './model';
+import { dataSchema } from './model';
 export const desktop = isTauri();
 type Stored = { revision: number; payload: string; savedAt: string };
 export type Snapshot = { revision: number; savedAt: string };

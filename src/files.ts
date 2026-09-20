@@ -1,6 +1,6 @@
+import type { AppData, Student, Workspace } from './model';
+import { counts, dataSchema, uid } from './model';
 import { desktop } from './storage';
-import { dataSchema, uid, counts } from './model';
-import type { AppData, Workspace, Student } from './model';
 
 export async function download(
   name: string,
@@ -13,7 +13,7 @@ export async function download(
     const { writeFile } = await import('@tauri-apps/plugin-fs');
     const path = await save({
       defaultPath: name,
-      filters: [{ name: '归录导出文件', extensions: [name.split('.').pop()!] }],
+      filters: [{ name: 'Ludian导出文件', extensions: [name.split('.').pop()!] }],
     });
     if (!path) return false;
     await writeFile(path, bytes);
@@ -53,7 +53,7 @@ export async function createBackup(data: AppData) {
 export async function parseBackup(value: string): Promise<AppData> {
   const b = JSON.parse(value.replace(/^\uFEFF/, ''));
   if (b.format !== 'guilu-backup' || b.version !== 1)
-    throw new Error('不是受支持的归录备份文件（版本 1）。');
+    throw new Error('不是受支持的Ludian备份文件（版本 1）。');
   if ((await digest(b.data)) !== b.checksum)
     throw new Error('备份校验不通过，文件可能被修改或损坏。');
   return dataSchema.parse(b.data);
@@ -187,7 +187,7 @@ export function markdownReport(w: Workspace, f: ReportFilter) {
 export async function excelReport(w: Workspace, f: ReportFilter) {
   const { default: ExcelJS } = await import('exceljs');
   const book = new ExcelJS.Workbook();
-  book.creator = '归录';
+  book.creator = 'Ludian';
   book.created = new Date();
   const summary = book.addWorksheet('考勤汇总');
   summary.addRow([`${w.name} · ${w.term}`]);

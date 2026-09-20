@@ -1,0 +1,109 @@
+@media (min-width: 1900px) {
+  .page-content {
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+  .calendar {
+    grid-template-rows: 56px repeat(10, 68px);
+  }
+}
+@media (max-width: 1250px) {
+  .page-content {
+    padding: 34px 30px 50px;
+  }
+  .app-shell {
+    --sidebar-width: 212px;
+  }
+  .beijing-clock {
+    display: none;
+  }
+  .overview-strip {
+    gap: 20px;
+  }
+  .strip-note {
+    display: none !important;
+  }
+  .daily-panel {
+    grid-template-columns: 180px minmax(170px, 1fr) 150px;
+  }
+  .aside-heading {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 10px;
+  }
+  .memo {
+    grid-column: 2 / 4;
+    grid-row: auto;
+    margin-top: 10px;
+  }
+  .daily-panel > .text-link {
+    grid-column: 2;
+  }
+  .schedule-section {
+    overflow-x: auto;
+  }
+  .report-card {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .report-card p {
+    font-size: 0.8571rem;
+  }
+}
+@media (max-width: 980px) {
+  .page-content {
+    padding: 28px 22px 45px;
+  }
+  .app-shell {
+    --sidebar-width: 190px;
+  }
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+  h1 {
+    font-size: 2.1429rem;
+  }
+  .context-fields {
+    flex-wrap: wrap;
+  }
+  .context-fields .course-select-label {
+    flex: 1 1 300px;
+  }
+  .table-toolbar {
+    flex-wrap: wrap;
+  }
+  .report-filters {
+    flex-wrap: wrap;
+  }
+  .report-cards {
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .report-card {
+    min-width: 120px;
+    padding-left: 0;
+  }
+  .settings-section {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .daily-panel {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .memo {
+    flex: 1;
+    min-width: 250px;
+  }
+  .sidebar nav button {
+    font-size: 0.9286rem;
+  }
+  .topbar {
+    padding: 0 12px;
+  }
+  .database-footer {
+    flex-direction: column;
+  }
+}

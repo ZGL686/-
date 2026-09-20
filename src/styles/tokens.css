@@ -1,0 +1,16 @@
+:root {
+  --font-ui: 'Ludian Rounded', 'GuiLu Sans', system-ui, sans-serif;
+  --line: #e9e9e7;
+  --muted: #787774;
+  --sidebar: #f7f7f5;
+  --blue: #2383e2;
+  --hover: #eeedea;
+  --pressed: #e6e5e1;
+  --focus-ring: #2383e245;
+  --radius: 6px;
+  --motion-fast: 120ms;
+  --motion-normal: 180ms;
+  --motion-slow: 220ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --shadow-popover: 0 8px 30px #00000012, 0 2px 5px #00000008;
+}

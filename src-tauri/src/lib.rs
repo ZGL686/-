@@ -173,7 +173,7 @@ pub fn run() {
             read_snapshot
         ])
         .run(tauri::generate_context!())
-        .expect("归录启动失败：请保留数据文件，检查文件权限或数据库完整性。");
+        .expect("Ludian启动失败：请保留数据文件，检查文件权限或数据库完整性。");
 }
 
 #[cfg(test)]

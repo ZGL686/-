@@ -1,22 +1,22 @@
-import { useState } from 'react';
 import {
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  MapPin,
-  UserRound,
-  Clock3,
   ArrowRight,
   BookOpen,
-  Settings2,
+  CalendarDays,
   Check,
+  ChevronLeft,
+  ChevronRight,
+  Clock3,
+  MapPin,
+  Plus,
+  Settings2,
+  UserRound,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Button, IconButton, Modal, PageHeading, Tag, TextLink } from './components/ui';
 import { useApp } from './context';
-import { weekOf, weekDates, formatWeeks, parseWeeks, uid, coursesOn } from './model';
-import type { Course } from './model';
-import { PageHeading, Modal, Tag, TextLink } from './ui';
-export type Session = { date: string; time: string; courseId: string; courseName: string };
+import type { Course, Session } from './model';
+import { coursesOn, formatWeeks, parseWeeks, uid, weekDates, weekOf } from './model';
+
 const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 export function Timetable({
   now,
@@ -41,19 +41,18 @@ export function Timetable({
   return (
     <>
       <PageHeading
-        eyebrow="你的教学日常，有迹可循"
-        title="课程表"
+        page="schedule"
         description={`${w.term} · ${w.name}`}
         actions={
           <>
-            <button onClick={onSettings}>
+            <Button onClick={onSettings}>
               <Settings2 size={16} />
               学期设置
-            </button>
-            <button className="primary" onClick={() => setEditor(null)}>
+            </Button>
+            <Button className="primary" onClick={() => setEditor(null)}>
               <Plus size={16} />
               添加课程
-            </button>
+            </Button>
           </>
         }
       />
@@ -91,32 +90,26 @@ export function Timetable({
         <section className="schedule-section">
           <div className="section-toolbar">
             <div className="week-navigation">
-              <button
-                className="icon-button"
-                aria-label="上一周"
-                disabled={week <= 1}
-                onClick={() => setSelected(week - 1)}
-              >
+              <IconButton label="上一周" disabled={week <= 1} onClick={() => setSelected(week - 1)}>
                 <ChevronLeft size={18} />
-              </button>
-              <button className="week-title" onClick={() => setWeekPicker(true)}>
+              </IconButton>
+              <Button className="week-title" onClick={() => setWeekPicker(true)}>
                 第 {week} 周 <span>⌄</span>
-              </button>
-              <button
-                className="icon-button"
-                aria-label="下一周"
+              </Button>
+              <IconButton
+                label="下一周"
                 disabled={week >= w.totalWeeks}
                 onClick={() => setSelected(week + 1)}
               >
                 <ChevronRight size={18} />
-              </button>
+              </IconButton>
               <span className="muted date-range">
                 {dates[0].replaceAll('-', '.')} — {dates[6].slice(5).replace('-', '.')}
               </span>
             </div>
-            <button className="small" onClick={() => setSelected(null)}>
+            <Button className="small" onClick={() => setSelected(null)}>
               回到本周
-            </button>
+            </Button>
           </div>
           {(current < 1 || current > w.totalWeeks) && (
             <div className="inline-note">当前日期在学期范围之外，正在预览第 {week} 周。</div>
@@ -148,7 +141,7 @@ export function Timetable({
               />
             ))}
             {courses.map((c) => (
-              <button
+              <Button
                 key={c.id}
                 className={`course-card ${c.color}`}
                 style={{ gridColumn: c.day + 1, gridRow: `${c.start + 1} / ${c.end + 2}` }}
@@ -160,7 +153,7 @@ export function Timetable({
                 <small>
                   {c.teacher} · {c.start}–{c.end} 节
                 </small>
-              </button>
+              </Button>
             ))}
           </div>
           <div className="calendar-footer">
@@ -192,7 +185,7 @@ export function Timetable({
           </div>
           {today.length ? (
             today.map((c) => (
-              <button
+              <Button
                 className="today-course"
                 key={c.id}
                 onClick={() =>
@@ -211,7 +204,7 @@ export function Timetable({
                 <strong>{c.name}</strong>
                 <span>{c.room.replace('韶师', '')}</span>
                 <ArrowRight size={14} />
-              </button>
+              </Button>
             ))
           ) : (
             <div className="day-off">
@@ -227,10 +220,10 @@ export function Timetable({
               </p>
             </div>
           )}
-          <button className="full-width" onClick={() => onAttendance()}>
+          <Button className="full-width" onClick={() => onAttendance()}>
             前往考勤台
             <ArrowRight size={15} />
-          </button>
+          </Button>
           <div className="aside-divider" />
           <div className="aside-heading">
             <BookOpen size={16} />
@@ -252,7 +245,7 @@ export function Timetable({
         >
           <div className="week-grid">
             {Array.from({ length: w.totalWeeks }, (_, i) => (
-              <button
+              <Button
                 key={i}
                 className={week === i + 1 ? 'selected' : ''}
                 onClick={() => {
@@ -261,7 +254,7 @@ export function Timetable({
                 }}
               >
                 {i + 1 === current ? '本周' : `第 ${i + 1} 周`}
-              </button>
+              </Button>
             ))}
           </div>
         </Modal>
@@ -289,15 +282,15 @@ export function Timetable({
             <Tag color={detail.color}>{dates[detail.day - 1]}</Tag>
           </div>
           <div className="modal-actions">
-            <button
+            <Button
               onClick={() => {
                 setEditor(detail);
                 setDetail(null);
               }}
             >
               编辑课程
-            </button>
-            <button
+            </Button>
+            <Button
               className="primary"
               onClick={() => {
                 onAttendance({
@@ -311,7 +304,7 @@ export function Timetable({
             >
               为这节课记考勤
               <ArrowRight size={15} />
-            </button>
+            </Button>
           </div>
         </Modal>
       )}
@@ -468,7 +461,7 @@ function CourseEditor({
         </label>
         <div className="color-picker">
           {(['purple', 'blue', 'pink', 'green', 'amber', 'teal'] as const).map((color) => (
-            <button
+            <Button
               type="button"
               aria-label={`${color}颜色`}
               key={color}
@@ -476,29 +469,29 @@ function CourseEditor({
               onClick={() => field('color', color)}
             >
               {c.color === color && <Check size={16} />}
-            </button>
+            </Button>
           ))}
         </div>
         {error && <p className="form-error">{error}</p>}
         {confirm && <p className="form-error">移除后将不再出现在课表中，已有考勤记录不受影响。</p>}
         <div className="modal-actions">
           {onDelete && (
-            <button
+            <Button
               type="button"
               className="danger-text"
               disabled={busy}
               onClick={() => (confirm ? onDelete() : setConfirm(true))}
             >
               {confirm ? '确认移除' : '移除课程'}
-            </button>
+            </Button>
           )}
           <span className="spacer" />
-          <button type="button" onClick={onClose}>
+          <Button type="button" onClick={onClose}>
             取消
-          </button>
-          <button className="primary" disabled={busy}>
+          </Button>
+          <Button className="primary" pending={busy}>
             保存课程
-          </button>
+          </Button>
         </div>
       </form>
     </Modal>

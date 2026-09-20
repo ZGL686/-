@@ -1,15 +1,17 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { AppLogo, Button, Toast } from './components/ui';
 import type { AppData, Workspace } from './model';
 import { dataSchema } from './model';
-import * as storage from './storage';
 import { loadSeed } from './seed';
+import * as storage from './storage';
 
 type Context = {
   data: AppData;
   w: Workspace;
   revision: number;
   busy: boolean;
+  saveFailed: boolean;
   notice: { text: string; error: boolean } | null;
   notify: (text: string, error?: boolean) => void;
   change: (fn: (d: AppData) => void, message?: string) => Promise<boolean>;
@@ -22,6 +24,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [revision, setRevision] = useState(0);
   const [fatal, setFatal] = useState('');
   const [busy, setBusy] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
   const [notice, setNotice] = useState<Context['notice']>(null);
   const state = useRef<{ data: AppData; revision: number } | undefined>(undefined);
   const saving = useRef(false);
@@ -49,7 +52,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const t = setTimeout(() => setNotice(null), 4200);
     return () => clearTimeout(t);
   }, [notice]);
-  const notify = (text: string, error = false) => setNotice({ text, error });
+  const notify = useCallback((text: string, error = false) => setNotice({ text, error }), []);
   async function change(fn: (d: AppData) => void, message = '已保存') {
     if (saving.current || !state.current) return false;
     saving.current = true;
@@ -62,9 +65,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       state.current = { data: next, revision: rev };
       setData(next);
       setRevision(rev);
+      setSaveFailed(false);
       if (message) notify(message);
       return true;
     } catch (e) {
+      setSaveFailed(true);
       notify(`未保存：${e instanceof Error ? e.message : String(e)}`, true);
       return false;
     } finally {
@@ -78,13 +83,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         <h1>数据暂时无法读取</h1>
         <p>{fatal}</p>
         <p>请保留原数据目录，检查磁盘权限与空间后重试。不要删除数据库或清理浏览器数据。</p>
-        <button onClick={() => window.location.reload()}>重新读取</button>
+        <Button onClick={() => window.location.reload()}>重新读取</Button>
       </div>
     );
   if (!data)
     return (
       <div className="loading">
-        <span className="brand-mark">归</span>
+        <AppLogo size={44} />
         <p>正在打开你的工作台…</p>
       </div>
     );
@@ -96,6 +101,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         w,
         revision,
         busy,
+        saveFailed,
         notice,
         notify,
         change,
@@ -105,12 +111,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     >
       {children}
       {notice && (
-        <div className={`toast ${notice.error ? 'error' : ''}`} role="status">
-          <span>{notice.text}</span>
-          <button aria-label="关闭通知" onClick={() => setNotice(null)}>
-            ×
-          </button>
-        </div>
+        <Toast text={notice.text} error={notice.error} onDismiss={() => setNotice(null)} />
       )}
     </C.Provider>
   );

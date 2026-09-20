@@ -55,7 +55,8 @@ test('settings persist, roster import isolates workspaces, backup round trip', a
   await expect(page.getByRole('status')).toContainText('已保存');
   await page.getByRole('navigation').getByRole('button', { name: '课程表', exact: true }).click();
   await expect(page.getByRole('region', { name: '第 3 周课表' })).toBeVisible();
-  await page.getByRole('button', { name: '新建工作台', exact: true }).first().click();
+  await page.getByRole('button', { name: '切换班级', exact: true }).click();
+  await page.getByRole('button', { name: '新建工作台', exact: true }).click();
   await page.getByLabel('工作台名称', { exact: true }).fill('选修课程');
   await page.getByLabel('选择学生信息表').setInputFiles({
     name: 'students.csv',
@@ -72,7 +73,9 @@ test('settings persist, roster import isolates workspaces, backup round trip', a
   await page.getByLabel('选择备份文件', { exact: true }).setInputFiles(path!);
   await expect(page.getByRole('heading', { name: '恢复备份副本' })).toBeVisible();
   await page.getByRole('button', { name: '确认恢复', exact: true }).click();
-  await expect(page.locator('.workspace-list>button')).toHaveCount(5);
+  await page.getByRole('button', { name: '切换班级', exact: true }).click();
+  await expect(page.locator('.workspace-menu .workspace-option:has(strong)')).toHaveCount(4);
+  await page.keyboard.press('Escape');
   await expect(page.getByRole('status')).toContainText('已恢复为独立工作台');
 });
 test('summary export and corrupted backup rejection', async ({ page }) => {
@@ -93,7 +96,8 @@ test('summary export and corrupted backup rejection', async ({ page }) => {
     buffer: Buffer.from('{"format":"guilu-backup","version":1,"checksum":"wrong","data":{}}'),
   });
   await expect(page.getByRole('status')).toContainText('校验不通过');
-  await expect(page.locator('.workspace-list>button')).toHaveCount(2);
+  await page.getByRole('button', { name: '切换班级', exact: true }).click();
+  await expect(page.locator('.workspace-menu .workspace-option:has(strong)')).toHaveCount(1);
 });
 test('two tabs reject stale writes without losing existing data', async ({ page, context }) => {
   const second = await context.newPage();
@@ -105,6 +109,8 @@ test('two tabs reject stale writes without losing existing data', async ({ page,
   await second.getByRole('button', { name: '设置与偏好' }).click();
   await second.getByRole('button', { name: '保存学期设置' }).click();
   await expect(second.getByRole('status')).toContainText('数据已在其他窗口更新');
+  await second.getByRole('button', { name: '关闭通知' }).click();
+  await expect(second.locator('.saved-status')).toContainText('保存未完成');
   await page.reload();
   await page.getByRole('navigation').getByRole('button', { name: '考勤工作台' }).click();
   await expect(page.getByTestId('student-row').first().locator('.count-value')).toHaveText('1');

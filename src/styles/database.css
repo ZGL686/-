@@ -1,0 +1,383 @@
+/* Database views use one neutral surface; color is reserved for property tags. */
+.database-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+.database-views {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.database-views > [role='tab'] {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  min-height: 30px;
+  font-size: 1rem;
+  padding: 5px 9px;
+}
+.database-views > [role='tab'].active {
+  background: #f1f1ef;
+  color: #37352f;
+  font-weight: 500;
+  border-radius: 5px;
+}
+.database-tools {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+.database-tools .tool-active {
+  color: #2383e2;
+  background: #eaf4fe;
+}
+.database-search {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: #9b9a97;
+  margin: 0 3px;
+}
+.database-search input {
+  border: 0;
+  font-size: 0.9286rem;
+  padding: 4px;
+  width: 90px;
+  transition: width 0.15s;
+}
+.database-search input:focus {
+  width: 155px;
+}
+.new-row-button {
+  margin-left: 6px;
+  min-height: 29px;
+  padding: 4px 9px;
+  font-size: 0.9286rem;
+}
+.database-chips {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+.database-chips button {
+  min-height: 25px;
+  padding: 3px 7px;
+  font-size: 0.8571rem;
+  background: #f2f7fc;
+  border-color: #e2edf9;
+  color: #2674b9;
+}
+.database-chips > .muted {
+  font-size: 0.8571rem;
+  margin-left: 4px;
+}
+.view-menu,
+.column-menu {
+  position: absolute;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 4px 18px #0002;
+  min-width: 190px;
+}
+.view-menu button,
+.column-menu > button {
+  border: 0;
+  background: none;
+  justify-content: flex-start;
+  font-size: 0.9286rem;
+}
+.view-menu button:hover,
+.column-menu > button:hover {
+  background: #f1f1ef;
+}
+.column-menu {
+  left: 0;
+  top: 35px;
+}
+.column-menu strong {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px;
+  font-size: 0.9286rem;
+  font-weight: 500;
+}
+.column-menu label {
+  padding: 6px;
+  margin: 0;
+}
+.database-body {
+  margin-top: 0;
+  min-width: 0;
+}
+.database-table-scroll {
+  overflow: auto;
+  min-height: 100px;
+}
+.database-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 100%;
+  width: max-content;
+  font-size: 1rem;
+}
+.database-table th {
+  position: relative;
+  text-align: left;
+  font-weight: 400;
+  color: #787774;
+  height: 36px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: 0;
+}
+.database-table td {
+  height: 36px;
+  padding: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.database-table th:last-child,
+.database-table td:last-child {
+  border-right: 0;
+}
+.database-table td.db-check,
+.database-table th.db-check {
+  padding: 10px 8px;
+  border-right: 0;
+  width: 34px;
+}
+.column-heading {
+  width: 100%;
+  justify-content: flex-start;
+  border: 0;
+  background: none;
+  min-height: 35px;
+  padding: 6px 9px;
+  color: var(--muted);
+  font-size: 0.9286rem;
+  overflow: hidden;
+}
+.column-heading svg {
+  flex-shrink: 0;
+}
+.database-table tbody tr:hover {
+  background: #fafaf9;
+}
+.database-table tr.row-selected {
+  background: #edf5fd;
+}
+.database-row-title {
+  min-height: 36px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 0;
+  background: transparent;
+  justify-content: flex-start;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+}
+.database-row-title > svg {
+  color: #9b9a97;
+  flex-shrink: 0;
+}
+.database-row-title > span {
+  display: none;
+  position: absolute;
+  right: 5px;
+  top: 6px;
+  border: 1px solid #e3e3e1;
+  background: white;
+  border-radius: 3px;
+  font-size: 0.7857rem;
+  padding: 2px 5px;
+  color: var(--muted);
+}
+.database-row-title:hover > span {
+  display: block;
+}
+.cell-button {
+  width: 100%;
+  min-height: 36px;
+  justify-content: flex-start;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 1rem;
+  padding: 6px 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cell-button > span:not(.checkbox-display) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cell-button:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.cell-empty {
+  color: #c2c2bf;
+  font-size: 0.9286rem;
+}
+.database-table .cell-empty {
+  visibility: hidden;
+}
+.cell-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.database-table.wrap .cell-button,
+.database-table.wrap .database-row-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.checkbox-display {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b9b9b5;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  color: white;
+  font-size: 0.8571rem;
+  flex-shrink: 0;
+}
+.checkbox-display.checked {
+  background: #2383e2;
+  border-color: #2383e2;
+}
+.column-calculation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  min-height: 34px;
+  color: var(--muted);
+  padding: 4px;
+}
+.column-calculation select {
+  width: auto;
+  max-width: 80px;
+  padding: 2px;
+  border: 0;
+  font-size: 0.7857rem;
+  background: transparent;
+  color: #9b9a97;
+}
+.column-calculation span {
+  font-size: 0.8571rem;
+  color: #666560;
+}
+.database-table tfoot td {
+  border: 0;
+}
+.cell-editor {
+  background: white;
+  padding: 7px;
+  min-width: 145px;
+  border: 1px solid #2383e2;
+  box-shadow: 0 2px 8px #0001;
+}
+.cell-editor input,
+.cell-editor select {
+  font-size: 0.9286rem;
+  padding: 5px;
+}
+.cell-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+.cell-editor-actions button {
+  font-size: 0.8571rem;
+  min-height: 25px;
+}
+.multi-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 0;
+}
+.database-add-row {
+  justify-content: flex-start;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: #9b9a97;
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 1rem;
+  min-height: 36px;
+  border-bottom: 1px solid var(--line);
+}
+.database-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 13px;
+  font-size: 0.8571rem;
+  color: #9b9a97;
+}
+.database-selection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #edf5fd;
+  padding: 8px 12px;
+  font-size: 0.9286rem;
+}
+.database-selection select {
+  width: 180px;
+  padding: 4px;
+}
+
+.database-table td.db-title-cell,
+.database-table th:nth-child(2) {
+  position: sticky;
+  left: 34px;
+  background: #fff;
+  z-index: 2;
+}
+.database-table td.db-check,
+.database-table th.db-check {
+  position: sticky;
+  left: 0;
+  background: #fff;
+  z-index: 3;
+}
+.database-table tr.row-selected td.db-title-cell,
+.database-table tr.row-selected td.db-check {
+  background: #edf5fd;
+}
+.database-table tr:hover td.db-title-cell,
+.database-table tr:hover td.db-check {
+  background: #fafaf9;
+}
+.column-menu {
+  z-index: 50;
+}

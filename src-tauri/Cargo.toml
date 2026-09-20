@@ -1,8 +1,8 @@
 [package]
 name = "guilu"
-version = "0.2.0"
-description = "归录班级考勤"
-authors = ["GuiLu"]
+version = "0.3.0"
+description = "Ludian班级考勤"
+authors = ["Ludian"]
 edition = "2021"
 
 [lib]

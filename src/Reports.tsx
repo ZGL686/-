@@ -1,16 +1,16 @@
-import { useState } from 'react';
 import {
-  Download,
-  FileText,
-  FileSpreadsheet,
   CalendarRange,
-  Users,
   ClipboardList,
+  Download,
+  FileSpreadsheet,
+  FileText,
+  Users,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Button, PageHeading, Tag } from './components/ui';
 import { useApp } from './context';
-import { counts, addDays } from './model';
-import { reportRows, excelReport, markdownReport, download } from './files';
-import { PageHeading, Tag } from './ui';
+import { download, excelReport, markdownReport, reportRows } from './files';
+import { addDays, counts } from './model';
 export function Reports() {
   const { w, notify } = useApp();
   const [from, setFrom] = useState(w.startDate);
@@ -47,19 +47,18 @@ export function Reports() {
   return (
     <>
       <PageHeading
-        eyebrow="从日常记录，到学期总结"
-        title="考勤汇总"
+        page="reports"
         description="随时整理考勤数据，让每一次沟通都有依据。"
         actions={
           <>
-            <button disabled={exporting} onClick={() => exportFile('md')}>
+            <Button disabled={exporting} onClick={() => exportFile('md')}>
               <FileText size={16} />
               导出 Markdown
-            </button>
-            <button className="primary" disabled={exporting} onClick={() => exportFile('xlsx')}>
+            </Button>
+            <Button className="primary" disabled={exporting} onClick={() => exportFile('xlsx')}>
               <Download size={16} />
               导出 Excel
-            </button>
+            </Button>
           </>
         }
       />
@@ -97,7 +96,7 @@ export function Reports() {
             ))}
           </select>
         </label>
-        <button
+        <Button
           className="small"
           onClick={() => {
             setFrom([w.startDate, ...w.records.map((r) => r.date)].sort()[0]);
@@ -110,7 +109,7 @@ export function Reports() {
           }}
         >
           全部记录
-        </button>
+        </Button>
       </div>
       {from > to && <p className="form-error">开始日期不能晚于结束日期，请调整。</p>}
       <div className="report-cards">
