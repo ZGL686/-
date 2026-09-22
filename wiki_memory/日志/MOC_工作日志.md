@@ -3,7 +3,7 @@ type: moc
 status: active
 kind: process
 importance: high
-updated: 2026-09-20
+updated: 2026-09-22
 topic: work-log-index
 source_logs: []
 supersedes: null
@@ -15,6 +15,7 @@ supersedes: null
 
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
+| 2026-09-22 | maintenance | 重新生成 `dist/Ludian-latest` 与 `dist/Ludian-latest.zip`，确认压缩包、解压目录和正式 Windows 程序可交付。 | archived | ludian-release-rebuild | [[日志/2026-09-22-Ludian正式包重建.md|2026-09-22｜Ludian 正式包重建]] |
 | 2026-09-20 | feature | 依据用户需求、课表、四张截图和班级学生表构建初版 Windows 考勤应用。 | archived | attendance-initial-release | [[日志/2026-09-20-班级考勤初版.md|2026-09-20｜班级考勤初版]] |
 | 2026-09-20 | feature | 根据用户反馈，进一步查看 Notion 官方 UI 图片和数据库手册，重做色调、布局与数据库交互，改善字体观感。 | archived | notion-database-redesign | [[日志/2026-09-20-Notion界面与数据库改造.md|2026-09-20｜Notion 界面与数据库改造]] |
 | 2026-09-20 | feature | 修复点击收起侧栏后的白屏，简化左上角，提供不同字体和交互反馈，从公共模块及质量检查维护整体可维护性。 | archived | ludian-shell-preferences-modularity | [[日志/2026-09-20-Ludian交互与模块化改造.md|2026-09-20｜Ludian 交互与模块化改造]] |
