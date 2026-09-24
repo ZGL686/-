@@ -51,7 +51,7 @@ export function NewWorkspace({ onClose }: { onClose: () => void }) {
         <label className="upload-zone">
           <FolderOpen size={28} strokeWidth={1.3} />
           <strong>{reading ? '正在读取名单…' : filename || '选择学生信息表'}</strong>
-          <span>支持 .xlsx / .csv，需包含“姓名”和“学号”列</span>
+          <span>选填 · 支持 .xlsx / .csv，需包含“姓名”和“学号”列</span>
           <input
             type="file"
             accept=".xlsx,.csv"
@@ -92,6 +92,7 @@ export function NewWorkspace({ onClose }: { onClose: () => void }) {
             ))}
           </div>
         )}
+        <p className="appearance-note">也可以先创建空工作台，再从学生数据库添加同学或导入名单。</p>
         <label className="check-label">
           <input type="checkbox" checked={copy} onChange={(e) => setCopy(e.target.checked)} />
           复制当前工作台的课表与学期设置
@@ -100,7 +101,7 @@ export function NewWorkspace({ onClose }: { onClose: () => void }) {
           <Button type="button" onClick={onClose}>
             取消
           </Button>
-          <Button className="primary" disabled={busy || reading || !students.length}>
+          <Button className="primary" disabled={busy || reading || !name.trim()}>
             创建工作台
           </Button>
         </div>

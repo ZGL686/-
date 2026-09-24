@@ -1,12 +1,47 @@
-import { Check, MousePointer2, RotateCcw, Sparkles } from 'lucide-react';
-import { Button, IconButton } from '../components/ui';
+import { Check, Monitor, Moon, Sun, MousePointer2, RotateCcw, Sparkles } from 'lucide-react';
+import { Button, ChoiceCards, IconButton } from '../components/ui';
 import { usePreferences } from './PreferencesProvider';
-import { defaultPreferences, fontOptions } from './model';
+import { defaultPreferences, fontOptions, themeOptions } from './model';
 
 export function AppearanceSettings() {
   const { preferences, setPreferences, storageError } = usePreferences();
   return (
     <div className="appearance-settings">
+      <section className="appearance-section">
+        <div className="appearance-heading">
+          <div>
+            <h3>主题</h3>
+            <p>选择界面的明暗，或随系统自动切换。</p>
+          </div>
+        </div>
+        <ChoiceCards
+          label="界面主题"
+          options={themeOptions}
+          value={preferences.theme}
+          onChange={(theme) => setPreferences({ theme })}
+          className="theme"
+          render={(id) => {
+            const option = themeOptions.find((item) => item.id === id)!;
+            const Icon = id === 'system' ? Monitor : id === 'light' ? Sun : Moon;
+            return (
+              <>
+                <span className={`theme-preview preview-${id}`} aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className="theme-title">
+                  <Icon size={16} />
+                  {option.name}
+                </span>
+                <small>{option.detail}</small>
+              </>
+            );
+          }}
+        />
+      </section>
       <section className="appearance-section">
         <div className="appearance-heading">
           <div>
@@ -17,6 +52,7 @@ export function AppearanceSettings() {
             className="text-button"
             onClick={() =>
               setPreferences({
+                theme: defaultPreferences.theme,
                 font: defaultPreferences.font,
                 fontSize: defaultPreferences.fontSize,
                 motion: defaultPreferences.motion,
@@ -27,53 +63,31 @@ export function AppearanceSettings() {
             恢复外观默认
           </Button>
         </div>
-        <div className="font-options" role="radiogroup" aria-label="界面字体">
-          {fontOptions.map((font) => (
-            <Button
-              key={font.id}
-              role="radio"
-              aria-checked={preferences.font === font.id}
-              tabIndex={preferences.font === font.id ? 0 : -1}
-              className={`font-option ${preferences.font === font.id ? 'selected' : ''}`}
-              onClick={() => setPreferences({ font: font.id })}
-              onKeyDown={(event) => {
-                if (
-                  !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(
-                    event.key,
-                  )
-                )
-                  return;
-                event.preventDefault();
-                const current = fontOptions.findIndex((option) => option.id === font.id);
-                const next =
-                  event.key === 'Home'
-                    ? 0
-                    : event.key === 'End'
-                      ? fontOptions.length - 1
-                      : (current +
-                          (['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1) +
-                          fontOptions.length) %
-                        fontOptions.length;
-                setPreferences({ font: fontOptions[next].id });
-                event.currentTarget.parentElement
-                  ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')
-                  [next]?.focus();
-              }}
-            >
-              <span className="font-option-title">
-                {font.name}
-                {preferences.font === font.id && <Check size={16} />}
-              </span>
-              <span className="font-sample" data-font={font.id}>
-                把日常，记清楚。
-              </span>
-              <span className="font-sample-number" data-font={font.id}>
-                Ludian · 09:20 · 0123456789
-              </span>
-              <small>{font.detail}</small>
-            </Button>
-          ))}
-        </div>
+        <ChoiceCards
+          label="界面字体"
+          options={fontOptions}
+          value={preferences.font}
+          onChange={(font) => setPreferences({ font })}
+          className="font"
+          render={(id) => {
+            const font = fontOptions.find((item) => item.id === id)!;
+            return (
+              <>
+                <span className="font-option-title">
+                  {font.name}
+                  {preferences.font === id && <Check size={16} />}
+                </span>
+                <span className="font-sample" data-font={id}>
+                  把日常，记清楚。
+                </span>
+                <span className="font-sample-number" data-font={id}>
+                  Ludian · 09:20 · 0123456789
+                </span>
+                <small>{font.detail}</small>
+              </>
+            );
+          }}
+        />
         <p className="appearance-note">
           三款内置字体可离线使用；少见字自动使用完整黑体字库补齐。系统字体随电脑而定。
         </p>

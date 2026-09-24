@@ -4,8 +4,8 @@
   top: 45px;
   bottom: 0;
   width: min(630px, 70vw);
-  background: white;
-  border-left: 1px solid #e3e3e1;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
   box-shadow: -7px 0 24px #0000000d;
   z-index: 40;
   display: flex;
@@ -35,7 +35,7 @@
   overflow: auto;
 }
 .peek-icon {
-  color: #787774;
+  color: var(--muted);
   margin-bottom: 18px;
 }
 .peek-content h2 {
@@ -78,9 +78,9 @@
   border: 0;
   justify-content: flex-start;
   padding: 7px;
-  color: #37352f;
+  color: var(--text);
   text-decoration: underline;
-  text-decoration-color: #dededc;
+  text-decoration-color: var(--border);
   text-underline-offset: 3px;
 }
 .peek-related {
@@ -101,7 +101,7 @@
 }
 .peek-section-title h3 > span {
   font-size: 0.9286rem;
-  color: #9b9a97;
+  color: var(--subtle);
   font-weight: 400;
 }
 .related-record {
@@ -118,7 +118,7 @@
   text-align: left;
 }
 .related-record > svg {
-  color: #9b9a97;
+  color: var(--subtle);
   flex-shrink: 0;
 }
 .related-record > span:not(.tag) {

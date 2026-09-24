@@ -6,7 +6,25 @@ import type { Workspace } from '../../model';
 import { beijingNow, uid, weekOf } from '../../model';
 export function TermSettings() {
   const { w, update, busy } = useApp();
-  const [draft, setDraft] = useState<Workspace>(structuredClone(w));
+  const [edits, setEdits] = useState<Partial<Workspace>>({});
+  const draft = { ...w, ...edits };
+  // Keep local edits while reflecting metadata saved through workspace management.
+  function setDraft(next: Workspace) {
+    const changed: Partial<Workspace> = {};
+    for (const key of [
+      'name',
+      'term',
+      'startDate',
+      'totalWeeks',
+      'periods',
+      'notes',
+      'categories',
+    ] as const) {
+      if (JSON.stringify(next[key]) !== JSON.stringify(w[key]))
+        Object.assign(changed, { [key]: next[key] });
+    }
+    setEdits(changed);
+  }
   const [label, setLabel] = useState('');
   return (
     <>
@@ -14,17 +32,8 @@ export function TermSettings() {
         className="settings-form"
         onSubmit={async (e) => {
           e.preventDefault();
-          await update((current) => {
-            Object.assign(current, {
-              name: draft.name,
-              term: draft.term,
-              startDate: draft.startDate,
-              totalWeeks: draft.totalWeeks,
-              periods: draft.periods,
-              notes: draft.notes,
-              categories: draft.categories,
-            });
-          }, '学期设置已保存');
+          if (await update((current) => Object.assign(current, edits), '学期设置已保存'))
+            setEdits({});
         }}
       >
         <section className="settings-section">

@@ -56,7 +56,7 @@ fn read_latest(conn: &Connection) -> Result<Option<Stored>, String> {
 fn commit(conn: &mut Connection, expected: i64, payload: &str) -> Result<i64, String> {
     let parsed: serde_json::Value =
         serde_json::from_str(payload).map_err(|_| "数据格式错误，保存已取消。".to_string())?;
-    if !matches!(parsed.get("schemaVersion").and_then(|v| v.as_u64()), Some(1 | 2))
+    if !matches!(parsed.get("schemaVersion").and_then(|v| v.as_u64()), Some(1 | 2 | 3))
         || !parsed.get("workspaces").is_some_and(|v| v.is_array())
     {
         return Err("不支持的数据版本，未更改原数据。".into());
@@ -210,7 +210,7 @@ mod tests {
         assert_eq!(std::fs::read(&p).unwrap(), b"damaged database");
     }
     #[test]
-    fn v2_upgrade_keeps_v1_snapshot_and_rejects_future_versions() {
+    fn upgrades_keep_original_snapshots_and_reject_future_versions() {
         let d = tempfile::tempdir().unwrap();
         let mut c = open_store(&d.path().join("data.db")).unwrap();
         commit(&mut c, 0, DATA).unwrap();
@@ -218,7 +218,11 @@ mod tests {
         assert_eq!(commit(&mut c, 1, v2).unwrap(), 2);
         assert_eq!(read_latest(&c).unwrap().unwrap().payload, v2);
         assert_eq!(c.query_row("SELECT payload FROM snapshots WHERE revision=1",[],|r|r.get::<_,String>(0)).unwrap(), DATA);
-        assert!(commit(&mut c, 2, r#"{"schemaVersion":3,"workspaces":[]}"#).is_err());
-        assert_eq!(read_latest(&c).unwrap().unwrap().revision,2);
+        let v3 = r#"{"schemaVersion":3,"workspaces":[{"deletedAt":"2026-09-24T00:00:00Z"}]}"#;
+        assert_eq!(commit(&mut c, 2, v3).unwrap(), 3);
+        assert_eq!(read_latest(&c).unwrap().unwrap().payload, v3);
+        assert_eq!(c.query_row("SELECT payload FROM snapshots WHERE revision=2",[],|r|r.get::<_,String>(0)).unwrap(), v2);
+        assert!(commit(&mut c, 3, r#"{"schemaVersion":4,"workspaces":[]}"#).is_err());
+        assert_eq!(read_latest(&c).unwrap().unwrap().revision,3);
     }
 }

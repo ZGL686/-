@@ -104,7 +104,7 @@
 .sidebar-caption {
   padding: 8px 10px;
   font-size: 0.7857rem;
-  color: #91918e;
+  color: var(--subtle);
 }
 .sidebar nav {
   display: flex;
@@ -119,7 +119,7 @@
   justify-content: flex-start;
   border: 0;
   border-radius: 5px;
-  color: #666560;
+  color: var(--text-secondary);
   background: none;
   font-size: 1rem;
 }
@@ -129,14 +129,14 @@
 }
 .sidebar nav button.active,
 .sidebar-bottom > button.active {
-  background: #eaeae8;
-  color: #37352f;
+  background: var(--selected-neutral);
+  color: var(--text);
   font-weight: 600;
 }
 .sidebar nav button small {
   margin-left: auto;
   font-size: 0.8571rem;
-  color: #9b9a97;
+  color: var(--subtle);
   font-weight: 400;
 }
 .sidebar-bottom {
@@ -148,7 +148,7 @@
   align-items: center;
   gap: 7px;
   padding: 18px 10px 6px;
-  color: #91918e;
+  color: var(--subtle);
   font-size: 0.7857rem;
 }
 .local-status small {
@@ -162,7 +162,7 @@
   justify-content: space-between;
   padding: 0 18px;
   font-size: 0.8571rem;
-  color: #6d6b66;
+  color: var(--text-secondary);
   gap: 18px;
 }
 .topbar > div {
@@ -185,7 +185,7 @@
   max-width: 220px;
 }
 .breadcrumb-slash {
-  color: #cecdca;
+  color: var(--faint);
   margin: 0 3px;
 }
 .saved-status {
@@ -193,12 +193,12 @@
   align-items: center;
   gap: 5px;
   font-size: 0.7857rem;
-  color: #92908a;
+  color: var(--subtle);
   white-space: nowrap;
 }
 .beijing-clock {
   font-size: 0.7857rem;
-  color: #92908a;
+  color: var(--subtle);
   margin-left: 12px;
   white-space: nowrap;
 }

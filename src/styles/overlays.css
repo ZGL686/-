@@ -1,5 +1,5 @@
 .modal {
-  border: 1px solid #e3e3e1;
+  border: 1px solid var(--border);
   border-radius: 9px;
   box-shadow: 0 14px 60px #0003;
   padding: 25px 28px;
@@ -7,7 +7,8 @@
   max-width: 92vw;
   max-height: 88vh;
   overflow: auto;
-  color: #37352f;
+  color: var(--text);
+  background: var(--surface);
 }
 .modal.wide {
   width: 780px;
@@ -43,7 +44,7 @@ label {
   gap: 6px;
   margin-bottom: 15px;
   font-size: 0.9286rem;
-  color: #666560;
+  color: var(--text-secondary);
 }
 label small {
   color: var(--muted);
@@ -59,7 +60,7 @@ label small {
   grid-template-columns: repeat(3, 1fr);
 }
 .form-error {
-  color: #b33b32;
+  color: var(--danger);
   font-size: 0.9286rem;
   line-height: 1.7;
   padding: 10px 0;
@@ -81,8 +82,8 @@ label small {
   gap: 16px;
   max-width: 80vw;
   z-index: 10000;
-  background: #37352f;
-  color: #fff;
+  background: var(--toast-bg);
+  color: var(--on-accent);
   border-radius: 5px;
   box-shadow: 0 4px 15px #0002;
   padding: 11px 14px;
@@ -90,7 +91,7 @@ label small {
   line-height: 1.6;
 }
 .toast.error {
-  background: #88443d;
+  background: var(--toast-error);
   white-space: pre-line;
 }
 .toast > button {
@@ -109,13 +110,13 @@ label small {
 .empty > span {
   display: block;
   margin-bottom: 12px;
-  color: #9b9a97;
+  color: var(--subtle);
 }
 .empty h3 {
   font-size: 1.1429rem;
   font-weight: 500;
   margin-bottom: 8px;
-  color: #666560;
+  color: var(--text-secondary);
 }
 .empty p {
   font-size: 0.9286rem;
@@ -133,7 +134,7 @@ label small {
   justify-content: center;
   gap: 20px;
   padding: 50px;
-  background: #fafaf9;
+  background: var(--surface-soft);
   color: var(--muted);
 }
 .fatal p {

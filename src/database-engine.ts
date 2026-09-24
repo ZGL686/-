@@ -7,6 +7,7 @@ import type {
 } from './database-schema';
 import type { Workspace } from './model';
 import { counts } from './model';
+import { setRecordsVoided } from './features/attendance/model';
 export type Property = Omit<CustomProperty, 'type' | 'options'> & {
   type: CustomProperty['type'] | 'title' | 'relation' | 'rollup';
   options?: string[];
@@ -248,7 +249,7 @@ export function writeCell(
   } else {
     const row = w.records.find((r) => r.id === rowId);
     if (!row) throw new Error('记录不存在');
-    if (p.id === 'voided') row.voided = Boolean(value);
+    if (p.id === 'voided') setRecordsVoided(w, [rowId], Boolean(value));
     else if (['studentId', 'category', 'date', 'time', 'note', 'teacher', 'room'].includes(p.id))
       Object.assign(row, { [p.id]: String(value ?? '') });
     row.updatedAt = new Date().toISOString();

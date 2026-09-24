@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { isTauri } from '@tauri-apps/api/core';
+import { getCurrentWindow } from '@tauri-apps/api/window';
+import { createContext, useContext, useEffect, useState } from 'react';
 import type { Preferences } from './model';
 import { defaultPreferences, parsePreferences, preferenceKey } from './model';
 
@@ -7,6 +9,12 @@ function apply(p: Preferences) {
   const root = document.documentElement;
   root.dataset.font = p.font;
   root.dataset.motion = p.motion;
+  root.dataset.theme =
+    p.theme === 'system'
+      ? matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : p.theme;
   root.style.setProperty('--base-font-size', `${p.fontSize}px`);
 }
 export function initializePreferences(): Preferences {
@@ -33,6 +41,19 @@ export function usePreferences() {
 export function PreferencesProvider({ children }: { children: ReactNode }) {
   const [preferences, set] = useState(initializePreferences);
   const [storageError, setStorageError] = useState(false);
+  useEffect(() => {
+    if (isTauri())
+      void getCurrentWindow()
+        .setTheme(preferences.theme === 'system' ? null : preferences.theme)
+        .catch((error: unknown) => console.warn('窗口主题未能同步', error));
+  }, [preferences.theme]);
+  useEffect(() => {
+    const system = matchMedia('(prefers-color-scheme: dark)');
+    const sync = () => apply(preferences);
+    system.addEventListener('change', sync);
+    sync();
+    return () => system.removeEventListener('change', sync);
+  }, [preferences]);
   function setPreferences(patch: Partial<Omit<Preferences, 'version'>>) {
     const next = parsePreferences(JSON.stringify({ ...preferences, ...patch }));
     apply(next);

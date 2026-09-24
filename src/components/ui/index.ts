@@ -1,4 +1,5 @@
 export { AppLogo } from './AppLogo';
+export { ChoiceCards } from './ChoiceCards';
 export { Button, IconButton } from './Button';
 export { Empty, Tag, TextLink } from './Content';
 export { Drawer } from './Drawer';

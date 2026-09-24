@@ -1,7 +1,7 @@
 :root {
   font-family: var(--font-ui);
-  color: #37352f;
-  background: #fff;
+  color: var(--text);
+  background: var(--surface);
   font-size: var(--base-font-size, 14px);
   font-weight: 400;
   line-height: 1.5;
@@ -26,14 +26,14 @@ button {
   gap: 7px;
   min-height: 32px;
   padding: 5px 10px;
-  border: 1px solid #e3e3e1;
+  border: 1px solid var(--border);
   border-radius: 4px;
-  background: white;
+  background: var(--surface);
   cursor: pointer;
   white-space: nowrap;
 }
 button:hover {
-  background: #f1f1ef;
+  background: var(--hover-soft);
 }
 button:disabled {
   opacity: 0.45;
@@ -41,15 +41,15 @@ button:disabled {
 }
 button.primary {
   background: var(--blue);
-  color: #fff;
+  color: var(--on-blue);
   border-color: var(--blue);
 }
 button.primary:hover {
-  background: #1675cf;
+  background: var(--primary-hover);
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #2383e2;
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 input,
@@ -58,23 +58,23 @@ textarea {
   width: 100%;
   min-width: 0;
   padding: 7px 9px;
-  border: 1px solid #dededc;
+  border: 1px solid var(--border);
   border-radius: 4px;
-  background: #fff;
+  background: var(--surface);
   outline: none;
 }
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: #2383e2;
-  box-shadow: 0 0 0 2px #2383e21c;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }
 input::placeholder,
 textarea::placeholder {
-  color: #9b9a97;
+  color: var(--subtle);
 }
 input[type='checkbox'] {
-  accent-color: #2383e2;
+  accent-color: var(--blue);
   width: 15px;
   height: 15px;
   flex-shrink: 0;
@@ -83,7 +83,7 @@ input[type='checkbox'] {
 }
 input[type='date'],
 input[type='time'] {
-  color-scheme: light;
+  color-scheme: inherit;
 }
 textarea {
   resize: vertical;
@@ -153,7 +153,7 @@ small {
   font-size: 0.9286rem;
 }
 .danger-text {
-  color: #b33b32;
+  color: var(--danger);
   border: 0;
   background: none;
 }
@@ -164,7 +164,7 @@ small {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #9b9a97;
+  background: var(--subtle);
   display: inline-block;
 }
 .tag {
@@ -176,39 +176,39 @@ small {
   padding: 1px 6px;
   font-size: 0.9286rem;
   line-height: 1.5;
-  background: #f1f1ef;
-  color: #55534e;
+  background: var(--hover-soft);
+  color: var(--text-secondary);
   font-weight: 400;
 }
 .purple {
-  --tint: #f0e7f7;
-  --ink: #69479b;
-  --accent: #a681bc;
+  --tint: var(--purple-tint);
+  --ink: var(--purple-ink);
+  --accent: var(--purple-accent);
 }
 .blue {
-  --tint: #e1eefb;
-  --ink: #28689c;
-  --accent: #7da8d3;
+  --tint: var(--blue-tint);
+  --ink: var(--blue-ink);
+  --accent: var(--blue-accent);
 }
 .pink {
-  --tint: #fae9e7;
-  --ink: #a3443e;
-  --accent: #dba6a2;
+  --tint: var(--pink-tint);
+  --ink: var(--pink-ink);
+  --accent: var(--pink-accent);
 }
 .green {
-  --tint: #e3eee5;
-  --ink: #3c6f51;
-  --accent: #93b69c;
+  --tint: var(--green-tint);
+  --ink: var(--green-ink);
+  --accent: var(--green-accent);
 }
 .amber {
-  --tint: #faedcc;
-  --ink: #876421;
-  --accent: #d5bb78;
+  --tint: var(--amber-tint);
+  --ink: var(--amber-ink);
+  --accent: var(--amber-accent);
 }
 .teal {
-  --tint: #e4eeee;
-  --ink: #466c6d;
-  --accent: #8aadae;
+  --tint: var(--teal-tint);
+  --ink: var(--teal-ink);
+  --accent: var(--teal-accent);
 }
 .tag.purple,
 .tag.blue,
@@ -218,4 +218,9 @@ small {
 .tag.teal {
   background: var(--tint);
   color: var(--ink);
+}
+
+button.danger {
+  color: var(--danger);
+  border-color: var(--danger);
 }

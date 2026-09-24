@@ -10,8 +10,8 @@
   background: none;
 }
 .config-tabs button.active {
-  background: #f1f1ef;
-  color: #37352f;
+  background: var(--hover-soft);
+  color: var(--text);
 }
 .view-config {
   padding-top: 20px;
@@ -59,7 +59,7 @@
   padding: 7px 0;
 }
 .property-config > svg {
-  color: #b0b0ad;
+  color: var(--faint);
 }
 .property-config > span:not(.property-type) {
   flex: 1;
@@ -79,10 +79,10 @@
   flex-direction: column;
   gap: 10px;
   padding: 15px;
-  color: #787774;
+  color: var(--muted);
 }
 .layout-options button.active {
-  background: #f7fbff;
-  color: #2383e2;
-  border-color: #2383e2;
+  background: var(--selected-soft);
+  color: var(--blue);
+  border-color: var(--blue);
 }

@@ -2,10 +2,9 @@ import {
   ArrowUpRight,
   Check,
   CheckSquare,
-  Clock3,
   FileText,
-  Pencil,
   Plus,
+  Minus,
   Search,
   SlidersHorizontal,
   Square,
@@ -15,9 +14,12 @@ import {
 import { useState } from 'react';
 import { Button, Empty, IconButton, Modal, PageHeading, Tag } from './components/ui';
 import { useApp } from './context';
+import { SessionFields } from './features/attendance/SessionFields';
+import { StudentDetail } from './features/attendance/StudentDetail';
+import { setRecordsVoided } from './features/attendance/model';
 import { RecordEditor } from './features/attendance/RecordEditor';
 import type { AttendanceRecord, Session, Student } from './model';
-import { beijingNow, counts, coursesOn, matchCourse, uid } from './model';
+import { beijingNow, counts, matchCourse, uid } from './model';
 export function Attendance({ session, onReports }: { session?: Session; onReports: () => void }) {
   const { w, update, busy, notify } = useApp();
   const now = beijingNow();
@@ -28,21 +30,24 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
   const [query, setQuery] = useState('');
   const [onlyRecords, setOnlyRecords] = useState(false);
   const [student, setStudent] = useState<Student | null>(null);
+  const [category, setCategory] = useState<string>();
   const [manual, setManual] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [batch, setBatch] = useState(false);
   const [note, setNote] = useState('');
   const [lastIds, setLastIds] = useState<string[]>([]);
+  const recent = w.records.filter((r) => lastIds.includes(r.id));
+  const recentVoided = recent.length > 0 && recent.every((r) => r.voided);
+  function openDetail(student: Student, category?: string) {
+    setStudent(student);
+    setCategory(category);
+  }
   const total = w.records.filter((r) => !r.voided).length;
   const shown = w.students.filter(
     (s) =>
       (s.name.includes(query) || s.number.includes(query)) &&
       (!onlyRecords || w.records.some((r) => !r.voided && r.studentId === s.id)),
   );
-  const setCourse = (id: string) => {
-    const c = w.courses.find((c) => c.id === id);
-    setContext({ ...context, courseId: id, courseName: c?.name ?? '' });
-  };
   async function add(ids: string[], category: string) {
     if (!context.courseName.trim()) {
       notify('请先选择课程，或填写临时课程名称。', true);
@@ -94,99 +99,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
           </>
         }
       />
-      <div className="attendance-context">
-        <div className="context-title">
-          <span className="icon-tile">
-            <Clock3 size={19} />
-          </span>
-          <div>
-            <strong>本次登记</strong>
-            <p>每次 +1 都会保存下方日期、时间和课程</p>
-          </div>
-        </div>
-        <div className="context-fields">
-          <label>
-            日期
-            <input
-              aria-label="登记日期"
-              type="date"
-              required
-              value={context.date}
-              onChange={(e) => {
-                if (e.target.value) setContext({ ...context, date: e.target.value });
-              }}
-            />
-          </label>
-          <label>
-            北京时间
-            <input
-              aria-label="登记时间"
-              type="time"
-              required
-              value={context.time}
-              onChange={(e) => {
-                if (e.target.value) setContext({ ...context, time: e.target.value });
-              }}
-            />
-          </label>
-          <label className="course-select-label">
-            课程
-            <select
-              aria-label="登记课程"
-              value={context.courseId}
-              onChange={(e) => setCourse(e.target.value)}
-            >
-              <option value="">临时课程 / 手动填写</option>
-              <optgroup label="所选日期的课程">
-                {coursesOn(w, context.date).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name} · {c.start}–{c.end} 节
-                  </option>
-                ))}
-              </optgroup>
-              <optgroup label="全部课程（调课时可选）">
-                {w.courses
-                  .filter((c) => !coursesOn(w, context.date).some((t) => t.id === c.id))
-                  .map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} · 周{['一', '二', '三', '四', '五', '六', '日'][c.day - 1]}
-                    </option>
-                  ))}
-              </optgroup>
-            </select>
-          </label>
-          <Button
-            className="small"
-            onClick={() => {
-              const now = beijingNow();
-              const c = matchCourse(w, now.date, now.time);
-              setContext({ ...now, courseId: c?.id ?? '', courseName: c?.name ?? '' });
-              notify(c ? `已匹配：${c.name}` : '当前时段没有匹配课程，请手动选择。');
-            }}
-          >
-            匹配当前课程
-          </Button>
-        </div>
-        {!context.courseId && (
-          <label className="temporary-course">
-            临时课程名称
-            <input
-              aria-label="临时课程名称"
-              placeholder="当前无匹配课程，可填写调课 / 活动名称"
-              value={context.courseName}
-              onChange={(e) => setContext({ ...context, courseName: e.target.value })}
-            />
-          </label>
-        )}
-        <label className="session-note">
-          备注
-          <input
-            placeholder="选填，如请假原因、调课说明…"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </label>
-      </div>
+      <SessionFields context={context} setContext={setContext} note={note} setNote={setNote} />
       <div className="table-toolbar">
         <div className="tabs">
           <Button className={!onlyRecords ? 'active' : ''} onClick={() => setOnlyRecords(false)}>
@@ -216,25 +129,20 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
       {lastIds.length > 0 && (
         <div className="undo-bar">
           <Check size={15} />
-          最近登记已保存
+          {recentVoided
+            ? `最近 ${recent.length} 条登记已撤销`
+            : `最近登记 ${recent.length} 条 · 当前有效 ${recent.filter((r) => !r.voided).length} 条`}
           <Button
-            onClick={async () => {
-              if (
-                await update((w) => {
-                  w.records.forEach((r) => {
-                    if (lastIds.includes(r.id)) {
-                      r.voided = true;
-                      r.updatedAt = new Date().toISOString();
-                    }
-                  });
-                }, '已撤销最近一次登记')
+            onClick={() =>
+              update(
+                (w) => setRecordsVoided(w, lastIds, !recentVoided),
+                recentVoided ? '已恢复最近一次登记' : '已撤销最近一次登记',
               )
-                setLastIds([]);
-            }}
+            }
             disabled={busy}
           >
             <Undo2 size={14} />
-            撤销
+            {recentVoided ? '恢复登记' : '撤销'}
           </Button>
         </div>
       )}
@@ -294,7 +202,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                     />
                   </td>
                   <td>
-                    <Button className="student-name" onClick={() => setStudent(s)}>
+                    <Button className="student-name" onClick={() => openDetail(s)}>
                       <span className={`avatar avatar-${i % 5}`}>{s.name.slice(-2)}</span>
                       <strong>{s.name}</strong>
                     </Button>
@@ -303,6 +211,13 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                   {w.categories.map((c) => (
                     <td key={c.id}>
                       <div className="counter">
+                        <IconButton
+                          label={`${s.name}${c.label}减一`}
+                          disabled={busy || !cs[c.id]}
+                          onClick={() => openDetail(s, c.id)}
+                        >
+                          <Minus size={13} />
+                        </IconButton>
                         <span className={cs[c.id] ? `count-value ${c.color}` : 'zero'}>
                           {cs[c.id] || '—'}
                         </span>
@@ -321,7 +236,7 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
                     {Object.values(cs).reduce((a, b) => a + b, 0) || '—'}
                   </td>
                   <td>
-                    <IconButton label={`查看${s.name}明细`} onClick={() => setStudent(s)}>
+                    <IconButton label={`查看${s.name}明细`} onClick={() => openDetail(s)}>
                       <ArrowUpRight size={15} />
                     </IconButton>
                   </td>
@@ -344,15 +259,25 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
         <span>
           {shown.length} 位同学 · {total} 条有效记录
         </span>
-        <span>“—”表示没有异常记录，不等同于已确认出勤</span>
+        <span>＋ 登记 · − 选择记录撤销 · 次数为学期累计；“—”不等同于已确认出勤</span>
       </div>
-      {student && <StudentDetail student={student} onClose={() => setStudent(null)} />}
+      {student && (
+        <StudentDetail
+          student={student}
+          category={category}
+          session={context}
+          onClose={() => setStudent(null)}
+        />
+      )}
       {manual && (
         <RecordEditor
           initial={{ ...context, note }}
           onClose={() => setManual(false)}
           onSave={async (record) => {
-            if (await update((w) => w.records.push(record), '考勤已补记')) setManual(false);
+            if (await update((w) => w.records.push(record), '考勤已补记')) {
+              setLastIds([record.id]);
+              setManual(false);
+            }
           }}
         />
       )}
@@ -379,108 +304,5 @@ export function Attendance({ session, onReports }: { session?: Session; onReport
         </Modal>
       )}
     </>
-  );
-}
-function StudentDetail({ student, onClose }: { student: Student; onClose: () => void }) {
-  const { w, update, busy } = useApp();
-  const [editing, setEditing] = useState<AttendanceRecord>();
-  const [showVoided, setShowVoided] = useState(false);
-  const records = w.records
-    .filter((r) => r.studentId === student.id && (showVoided || !r.voided))
-    .sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
-  const c = counts(w, student.id);
-  return (
-    <Modal
-      wide
-      title={`${student.name}的考勤明细`}
-      subtitle={`${student.number} · ${student.group || w.name}`}
-      onClose={onClose}
-    >
-      <div className="student-summary">
-        {w.categories.map((k) => (
-          <div key={k.id}>
-            <Tag color={k.color}>{k.label}</Tag>
-            <strong>
-              {c[k.id]}
-              <small>次</small>
-            </strong>
-          </div>
-        ))}
-      </div>
-      <div className="detail-toolbar">
-        <h3>登记记录</h3>
-        <label className="check-label">
-          <input
-            type="checkbox"
-            checked={showVoided}
-            onChange={(e) => setShowVoided(e.target.checked)}
-          />
-          显示已撤销记录
-        </label>
-      </div>
-      <div className="record-list">
-        {records.map((r) => (
-          <div className={`record-item ${r.voided ? 'voided' : ''}`} key={r.id}>
-            <div className="record-date">
-              <b>{r.date.slice(5).replace('-', '/')}</b>
-              <small>
-                {r.date.slice(0, 4)} · {r.time}
-              </small>
-            </div>
-            <div className="record-body">
-              <strong>{r.courseName}</strong>
-              <p>
-                {r.room || '未填写教室'}
-                {r.teacher ? ` · ${r.teacher}` : ''}
-              </p>
-              {r.note && <p className="record-note">{r.note}</p>}
-            </div>
-            <Tag color={w.categories.find((c) => c.id === r.category)?.color}>
-              {r.voided ? '已撤销' : w.categories.find((c) => c.id === r.category)?.label}
-            </Tag>
-            <IconButton label="编辑记录" disabled={r.voided} onClick={() => setEditing(r)}>
-              <Pencil size={15} />
-            </IconButton>
-            <Button
-              className="text-button"
-              disabled={busy}
-              onClick={() =>
-                update(
-                  (w) => {
-                    const record = w.records.find((x) => x.id === r.id)!;
-                    record.voided = !record.voided;
-                    record.updatedAt = new Date().toISOString();
-                  },
-                  r.voided ? '记录已恢复' : '记录已撤销',
-                )
-              }
-            >
-              {r.voided ? '恢复' : '撤销'}
-            </Button>
-          </div>
-        ))}
-        {!records.length && (
-          <Empty
-            icon={<Check size={28} />}
-            title="暂无异常考勤记录"
-            text="登记的每一条考勤都会保留日期、课程和备注。"
-          />
-        )}
-      </div>
-      {editing && (
-        <RecordEditor
-          initial={editing}
-          onClose={() => setEditing(undefined)}
-          onSave={async (record) => {
-            if (
-              await update((w) => {
-                w.records[w.records.findIndex((r) => r.id === record.id)] = record;
-              }, '考勤明细已更新')
-            )
-              setEditing(undefined);
-          }}
-        />
-      )}
-    </Modal>
   );
 }

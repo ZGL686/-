@@ -15,8 +15,15 @@ export const fontOptions = [
   { id: 'system', name: '系统字体', detail: '使用电脑上的默认界面字体', family: 'system-ui' },
 ] as const;
 export type FontId = (typeof fontOptions)[number]['id'];
+export const themeOptions = [
+  { id: 'system', name: '跟随系统', detail: '随系统自动切换' },
+  { id: 'light', name: '浅色', detail: '明亮清晰' },
+  { id: 'dark', name: '深色', detail: '柔和暗色' },
+] as const;
+export type ThemeId = (typeof themeOptions)[number]['id'];
 export type Preferences = {
   version: 1;
+  theme: ThemeId;
   font: FontId;
   fontSize: 14 | 15 | 16;
   motion: 'system' | 'reduced';
@@ -25,6 +32,7 @@ export type Preferences = {
 export const preferenceKey = 'ludian.preferences.v1';
 export const defaultPreferences: Preferences = {
   version: 1,
+  theme: 'system',
   font: 'rounded',
   fontSize: 14,
   motion: 'system',
@@ -41,6 +49,7 @@ export function parsePreferences(raw: string | null): Preferences {
     const value = p as Record<string, unknown>;
     return {
       version: 1,
+      theme: themeOptions.some((t) => t.id === value.theme) ? (value.theme as ThemeId) : 'system',
       font: fontOptions.some((f) => f.id === value.font)
         ? (value.font as FontId)
         : defaultPreferences.font,

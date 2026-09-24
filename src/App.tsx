@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AppShell } from './app/AppShell';
 import type { PageId } from './app/navigation';
+import { WorkspaceManager } from './features/workspaces/WorkspaceManager';
 import { Attendance } from './Attendance';
 import { ErrorBoundary } from './components/ui';
 import { useApp } from './context';
@@ -15,6 +16,7 @@ export default function App() {
   const { w } = useApp();
   const [page, setPage] = useState<PageId>('schedule');
   const [now, setNow] = useState(beijingNow());
+  const [manageWorkspaces, setManageWorkspaces] = useState(false);
   const [newWorkspace, setNewWorkspace] = useState(false);
   const [session, setSession] = useState<Session>();
   useEffect(() => {
@@ -32,7 +34,14 @@ export default function App() {
         page={page}
         navigate={navigate}
         now={now}
-        onNew={() => setNewWorkspace(true)}
+        onNew={() => {
+          setSession(undefined);
+          setNewWorkspace(true);
+        }}
+        onManage={() => {
+          setSession(undefined);
+          setManageWorkspaces(true);
+        }}
         onSwitch={() => setSession(undefined)}
       >
         <div className={`page-content page-${page}`} key={`${page}-${w.id}`}>
@@ -57,6 +66,15 @@ export default function App() {
           </ErrorBoundary>
         </div>
       </AppShell>
+      {manageWorkspaces && (
+        <WorkspaceManager
+          onClose={() => setManageWorkspaces(false)}
+          onNew={() => {
+            setManageWorkspaces(false);
+            setNewWorkspace(true);
+          }}
+        />
+      )}
       {newWorkspace && <NewWorkspace onClose={() => setNewWorkspace(false)} />}
     </>
   );

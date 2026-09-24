@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
+import { prepareManagementRestart, verifyManagementRestart } from './native-management.mjs';
 import { isolatedEnvironment, verifyNativeIsolation } from './native-isolation.mjs';
 const root = process.cwd();
 const dataDir = path.join(root, '.local', `native-smoke-${Date.now()}`);
@@ -116,7 +117,7 @@ try {
   await page.getByRole('heading', { name: '课程表', exact: true }).waitFor();
   let stored = await page.evaluate(() => window.__TAURI_INTERNALS__.invoke('load_data'));
   assert.equal(JSON.parse(stored.payload).workspaces[0].records.length, 2);
-  assert.equal(JSON.parse(stored.payload).schemaVersion, 2);
+  assert.equal(JSON.parse(stored.payload).schemaVersion, 3);
   await page.getByRole('navigation').getByRole('button', { name: '学生数据库' }).click();
   await page.getByRole('button', { name: '测试甲的跟进状态', exact: true }).click();
   await page.getByLabel('编辑跟进状态').selectOption('跟进中');
@@ -193,6 +194,7 @@ try {
   }
   await page.getByRole('button', { name: '舒适 · 15' }).click();
   await page.getByLabel('减少动态效果').check();
+  await prepareManagementRestart(page);
   await page.screenshot({ path: path.join(dataDir, 'appearance-desktop.png') });
   await page.getByRole('button', { name: '收起侧栏', exact: true }).click();
 
@@ -205,7 +207,9 @@ try {
   assert.equal(await page.locator('html').evaluate((el) => getComputedStyle(el).fontSize), '15px');
   await page.getByRole('button', { name: '展开侧栏', exact: true }).click();
   stored = await page.evaluate(() => window.__TAURI_INTERNALS__.invoke('load_data'));
-  assert.equal(stored.revision, 4);
+  await verifyManagementRestart(page);
+  stored = await page.evaluate(() => window.__TAURI_INTERNALS__.invoke('load_data'));
+  assert.equal(stored.revision, 11);
   const finalData = JSON.parse(stored.payload);
   assert.equal(finalData.workspaces[0].records[1].courseName, '桌面独立验收课程');
   assert.deepEqual(finalData.workspaces[0].records[0], legacyWorkspace.records[0]);
@@ -216,7 +220,7 @@ try {
   );
   assert.equal(original, legacyPayload);
   const snapshots = await page.evaluate(() => window.__TAURI_INTERNALS__.invoke('list_snapshots'));
-  assert.equal(snapshots.length, 4);
+  assert.equal(snapshots.length, 11);
   assert.deepEqual(errors, []);
   console.log(
     JSON.stringify({
@@ -226,6 +230,9 @@ try {
       legacySnapshotRetained: true,
       offlineFont: true,
       fontsVerified: 3,
+      themePersisted: true,
+      recycleBinPersistedAndRestored: true,
+      minusAndRestore: true,
       sidebarRestored: true,
       preferencesPersisted: true,
       browserProfileIsolated: true,

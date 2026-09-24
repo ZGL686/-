@@ -12,7 +12,7 @@
   margin-bottom: 12px;
 }
 .page-title-icon {
-  color: #55534e;
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 .page-heading p {

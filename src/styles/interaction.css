@@ -16,7 +16,7 @@ button:not(:disabled):active {
   box-shadow: inset 0 1px 2px #00000010;
 }
 button.primary:not(:disabled):active {
-  background-color: #1265b4;
+  background-color: var(--primary-pressed);
 }
 button:focus-visible,
 .file-button:focus-within {
@@ -35,7 +35,7 @@ button > svg,
 }
 .icon-button:not(:disabled):hover > svg {
   transform: translateY(-1px);
-  color: #37352f;
+  color: var(--text);
 }
 .icon-button:not(:disabled):active > svg {
   transform: scale(0.9);
@@ -60,7 +60,7 @@ button > svg,
 .course-card:hover,
 .database-card:hover {
   box-shadow: 0 2px 8px #0000000c;
-  border-color: #bbb9b4;
+  border-color: var(--border-strong);
 }
 .database-card.dragging {
   opacity: 0.45;
@@ -72,12 +72,12 @@ button > svg,
   border-radius: 7px;
 }
 .board-column.drop-target {
-  background: #eef6fe;
-  box-shadow: inset 0 0 0 2px #2383e2;
+  background: var(--selected);
+  box-shadow: inset 0 0 0 2px var(--blue);
 }
 .database-table th.drop-target {
   box-shadow: inset 3px 0 var(--blue);
-  background: #edf5fd;
+  background: var(--selected);
 }
 .database-row-title > span {
   transition: opacity var(--motion-fast) ease;
@@ -94,7 +94,7 @@ button > svg,
   padding: 6px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--surface);
   box-shadow: var(--shadow-popover);
   animation: pop-in var(--motion-fast) var(--ease-out);
 }
@@ -122,8 +122,8 @@ button > svg,
   z-index: 10000;
   pointer-events: none;
   transform: translateX(-50%);
-  background: #37352f;
-  color: #fff;
+  background: var(--tooltip-bg);
+  color: var(--on-accent);
   font-size: 0.8571rem;
   padding: 5px 9px;
   border-radius: 5px;
@@ -154,7 +154,7 @@ button > svg,
   animation: spin 900ms linear infinite;
 }
 .save-failed {
-  color: #b6463d;
+  color: var(--danger);
 }
 .is-saving {
   color: var(--blue);

@@ -62,7 +62,9 @@ export function Backups() {
             <Download size={22} />
           </span>
           <h3>导出完整备份</h3>
-          <p>包含所有工作台、学生名单、课程、考勤记录和已撤销记录，保存为 JSON 文件。</p>
+          <p>
+            包含所有工作台（含回收站）、学生名单、课程、考勤记录和已撤销记录，保存为 JSON 文件。
+          </p>
           <Button className="primary" disabled={working} onClick={exportBackup}>
             <Download size={16} />
             导出备份
@@ -156,7 +158,10 @@ export function Backups() {
           <div className="restore-preview">
             {incoming.workspaces.map((w) => (
               <div key={w.id}>
-                <strong>{w.name}</strong>
+                <strong>
+                  {w.name}
+                  {w.deletedAt ? '（回收站）' : ''}
+                </strong>
                 <span>
                   {w.students.length} 位同学 · {w.records.filter((r) => !r.voided).length}{' '}
                   条有效记录

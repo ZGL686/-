@@ -27,7 +27,7 @@ describe('database migration and integrity', () => {
     delete old.workspaces[0].databases;
     const before = JSON.stringify(old);
     const next = dataSchema.parse(old);
-    expect(next.schemaVersion).toBe(2);
+    expect(next.schemaVersion).toBe(3);
     expect(next.workspaces[0].students).toEqual(data.workspaces[0].students);
     expect(next.workspaces[0].courses).toEqual(data.workspaces[0].courses);
     expect(next.workspaces[0].databases.students.views).toHaveLength(3);

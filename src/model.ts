@@ -61,6 +61,7 @@ export const workspaceSchema = z
       .max(12),
     periods: z.array(z.object({ start: time, end: time })).length(10),
     notes: text,
+    deletedAt: z.iso.datetime().optional(),
     databases: z.object({ students: databaseSchema, records: databaseSchema }).default(() => ({
       students: defaultDatabase('students'),
       records: defaultDatabase('records'),
@@ -109,21 +110,26 @@ export const workspaceSchema = z
   });
 const currentDataSchema = z
   .object({
-    schemaVersion: z.literal(2),
+    schemaVersion: z.literal(3),
     activeWorkspaceId: id,
     workspaces: z.array(workspaceSchema).min(1),
   })
   .superRefine((d, ctx) => {
-    if (!d.workspaces.some((w) => w.id === d.activeWorkspaceId))
+    if (!d.workspaces.some((w) => w.id === d.activeWorkspaceId && !w.deletedAt))
       ctx.addIssue({ code: 'custom', message: '当前工作台不存在' });
     if (new Set(d.workspaces.map((w) => w.id)).size !== d.workspaces.length)
       ctx.addIssue({ code: 'custom', message: '工作台 ID 重复' });
   });
-// Migration is in memory. Existing snapshots remain intact; the next successful
-// transaction writes v2. v0.1 rejects v2 instead of stripping database properties.
+// Migration stays in memory until a successful transaction. Older applications
+// reject v3 rather than silently removing the recycle-bin state on their next save.
 export const dataSchema = z.preprocess((input) => {
-  if (input && typeof input === 'object' && 'schemaVersion' in input && input.schemaVersion === 1)
-    return { ...input, schemaVersion: 2 };
+  if (
+    input &&
+    typeof input === 'object' &&
+    'schemaVersion' in input &&
+    (input.schemaVersion === 1 || input.schemaVersion === 2)
+  )
+    return { ...input, schemaVersion: 3 };
   return input;
 }, currentDataSchema);
 export type Student = z.infer<typeof studentSchema>;
@@ -256,12 +262,12 @@ export function importAsCopies(current: AppData, incoming: AppData): AppData {
   const copies = incoming.workspaces.map((w) => ({
     ...structuredClone(w),
     id: uid(),
-    name: `${w.name}（恢复副本）`,
+    name: `${w.name.slice(0, 94)}（恢复副本）`,
   }));
   return dataSchema.parse({
     ...current,
     workspaces: [...current.workspaces, ...copies],
-    activeWorkspaceId: copies[0].id,
+    activeWorkspaceId: copies.find((w) => !w.deletedAt)!.id,
   });
 }
 

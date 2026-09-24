@@ -18,7 +18,7 @@
   margin-top: 8px;
 }
 .inline-note {
-  background: #f7f7f5;
+  background: var(--sidebar);
   padding: 10px 12px;
   border-radius: 4px;
   color: var(--muted);
@@ -65,7 +65,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #f7f7f5;
+  background: var(--sidebar);
   padding: 18px 20px;
   border-radius: 4px;
 }
@@ -99,12 +99,12 @@
   flex-direction: row;
   align-items: center;
   gap: 7px;
-  background: #fff;
-  border: 1px solid #dededc;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 4px;
   padding: 6px 10px;
   cursor: pointer;
-  color: #37352f;
+  color: var(--text);
 }
 .file-button input,
 .upload-zone input {
@@ -124,7 +124,7 @@
 }
 .data-location code {
   font-size: 0.9286rem;
-  background: #f7f7f5;
+  background: var(--sidebar);
   padding: 6px 8px;
   display: block;
   overflow-wrap: anywhere;
@@ -164,9 +164,9 @@
   color: var(--muted);
 }
 .upload-zone {
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--border-strong);
   border-radius: 5px;
-  background: #fafaf9;
+  background: var(--surface-soft);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,7 +181,7 @@
 }
 .roster-preview {
   margin: 15px 0;
-  background: #f7f7f5;
+  background: var(--sidebar);
   padding: 15px;
 }
 .roster-preview > div {

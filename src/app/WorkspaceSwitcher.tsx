@@ -1,13 +1,16 @@
-import { Check, ChevronDown, Plus } from 'lucide-react';
+import { Check, ChevronDown, Plus, Settings2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { AppLogo, Button, Popover } from '../components/ui';
 import { useApp } from '../context';
+import { activeWorkspaces } from '../features/workspaces/model';
 
 export function WorkspaceSwitcher({
   onNew,
+  onManage,
   onSwitch,
 }: {
   onNew: () => void;
+  onManage: () => void;
   onSwitch: () => void;
 }) {
   const { w, data, busy, change } = useApp();
@@ -40,7 +43,7 @@ export function WorkspaceSwitcher({
           className="workspace-menu"
         >
           <div className="popover-caption">切换班级</div>
-          {data.workspaces.map((workspace) => (
+          {activeWorkspaces(data).map((workspace) => (
             <Button
               key={workspace.id}
               className="workspace-option"
@@ -67,6 +70,16 @@ export function WorkspaceSwitcher({
             </Button>
           ))}
           <div className="popover-divider" />
+          <Button
+            className="workspace-option"
+            onClick={() => {
+              setOpen(false);
+              onManage();
+            }}
+          >
+            <Settings2 size={16} />
+            管理工作台
+          </Button>
           <Button
             className="workspace-option"
             onClick={() => {

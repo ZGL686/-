@@ -21,6 +21,7 @@ export function AppShell({
   page,
   navigate,
   onNew,
+  onManage,
   onSwitch,
   now,
   children,
@@ -28,6 +29,7 @@ export function AppShell({
   page: PageId;
   navigate: (page: PageId) => void;
   onNew: () => void;
+  onManage: () => void;
   onSwitch: () => void;
   now: { date: string; time: string };
   children: ReactNode;
@@ -39,7 +41,7 @@ export function AppShell({
   return (
     <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''}`}>
       <aside id="app-sidebar" className="sidebar" inert={collapsed} aria-hidden={collapsed}>
-        <WorkspaceSwitcher onNew={onNew} onSwitch={onSwitch} />
+        <WorkspaceSwitcher onNew={onNew} onManage={onManage} onSwitch={onSwitch} />
         <div className="sidebar-caption">班级管理</div>
         <nav aria-label="工作空间页面">
           {primaryPages.map((id) => {

@@ -58,7 +58,7 @@
 }
 .report-card p {
   font-size: 0.8571rem;
-  color: #91918e;
+  color: var(--subtle);
 }
 .category-dot {
   width: 7px;
@@ -86,7 +86,7 @@
   font-weight: 500;
 }
 .report-table tfoot {
-  background: #fafaf9;
+  background: var(--surface-soft);
   font-weight: 500;
 }
 .report-note {

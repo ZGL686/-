@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { defaultPreferences, parsePreferences } from '../src/preferences/model';
 
 describe('device preferences are safe to load before application data', () => {
+  it.each(['system', 'light', 'dark'])('persists theme %s and rejects unknown themes', (theme) => {
+    expect(parsePreferences(JSON.stringify({ version: 1, theme })).theme).toBe(theme);
+    expect(parsePreferences(JSON.stringify({ version: 1, theme: 'invalid' })).theme).toBe('system');
+  });
   it.each([null, '', '{broken', 'null', '[]', '{"version":2,"font":"handwritten"}'])(
     'uses defaults for unsupported input %s',
     (raw) => {
@@ -43,6 +47,7 @@ describe('device preferences are safe to load before application data', () => {
     const p = {
       version: 1,
       font: 'system',
+      theme: 'dark',
       fontSize: 16,
       motion: 'reduced',
       sidebarCollapsed: true,

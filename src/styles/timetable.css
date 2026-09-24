@@ -14,7 +14,7 @@
 }
 .overview-strip strong {
   font-size: 1.0714rem;
-  color: #37352f;
+  color: var(--text);
   font-weight: 600;
 }
 .overview-strip small {
@@ -54,7 +54,7 @@
   padding: 4px;
 }
 .week-title > span {
-  color: #9b9a97;
+  color: var(--subtle);
 }
 .date-range {
   font-size: 0.9286rem;
@@ -90,14 +90,14 @@
 .day-heading b {
   font-size: 1.2143rem;
   font-weight: 500;
-  color: #37352f;
+  color: var(--text);
 }
 .day-heading.today b {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2383e2;
-  color: white;
+  background: var(--blue);
+  color: var(--on-blue);
   width: 27px;
   height: 27px;
   border-radius: 50%;
@@ -111,13 +111,13 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid var(--line);
-  color: #91918e;
+  color: var(--subtle);
   line-height: 1.3;
 }
 .period-label b {
   font-size: 0.9286rem;
   font-weight: 500;
-  color: #787774;
+  color: var(--muted);
   margin-bottom: 2px;
 }
 .period-label span {
@@ -126,21 +126,21 @@
 .calendar-cell {
   border-left: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: #fff;
+  background: var(--surface);
 }
 .calendar-cell.weekend {
-  background: #fafaf9;
+  background: var(--surface-soft);
 }
 .calendar-cell.afternoon {
-  border-top: 2px solid #dededb;
+  border-top: 2px solid var(--border-strong);
 }
 .today-col {
-  background: #fbfcfd;
+  background: var(--surface-today);
 }
 .course-card {
   z-index: 1;
   margin: 4px;
-  border: 1px solid #e5e5e3;
+  border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: 4px;
   padding: 9px 9px 7px;
@@ -151,7 +151,7 @@
   text-align: left;
   white-space: normal;
   overflow: hidden;
-  background: white;
+  background: var(--surface);
   gap: 6px;
   box-shadow: 0 1px 2px #00000008;
 }
@@ -162,17 +162,17 @@
   font-weight: 600;
   font-size: 1rem;
   line-height: 1.55;
-  color: #37352f;
+  color: var(--text);
 }
 .course-card > span {
   font-size: 0.8571rem;
-  color: #787774;
+  color: var(--muted);
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
 .course-card > small {
   font-size: 0.8571rem;
-  color: #787774;
+  color: var(--muted);
   margin-top: auto;
 }
 .calendar-footer {
@@ -180,7 +180,7 @@
   justify-content: space-between;
   gap: 10px;
   padding-top: 10px;
-  color: #91918e;
+  color: var(--subtle);
   font-size: 0.8571rem;
 }
 .calendar-footer > span {
@@ -191,7 +191,7 @@
 .tiny-square {
   width: 7px;
   height: 7px;
-  background: #d3d3d0;
+  background: var(--border-strong);
   border-radius: 1px;
 }
 .daily-panel {
@@ -211,7 +211,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #787774;
+  color: var(--muted);
   flex-shrink: 0;
 }
 .daily-title p {
@@ -256,7 +256,7 @@
   white-space: pre-line;
   font-size: 0.9286rem;
   line-height: 1.9;
-  color: #787774;
+  color: var(--muted);
   grid-column: 4;
   grid-row: 2 / span 2;
   margin-top: -22px;
@@ -270,7 +270,7 @@
   align-items: flex-start;
   white-space: normal;
   border: 0;
-  background: #f7f7f5;
+  background: var(--sidebar);
   position: relative;
   padding: 10px 12px;
   grid-column: 2;
@@ -287,7 +287,7 @@
 .today-course small,
 .today-course > span {
   font-size: 0.8571rem;
-  color: #787774;
+  color: var(--muted);
 }
 .color-line {
   display: none;
@@ -298,9 +298,9 @@
   gap: 8px;
 }
 .week-grid button.selected {
-  background: #e7f3ff;
-  color: #2383e2;
-  border-color: #85b9ed;
+  background: var(--selected);
+  color: var(--blue);
+  border-color: var(--blue);
 }
 .course-detail {
   display: flex;

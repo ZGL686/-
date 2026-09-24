@@ -23,8 +23,8 @@
   padding: 5px 9px;
 }
 .database-views > [role='tab'].active {
-  background: #f1f1ef;
-  color: #37352f;
+  background: var(--hover-soft);
+  color: var(--text);
   font-weight: 500;
   border-radius: 5px;
 }
@@ -35,14 +35,14 @@
   margin-left: auto;
 }
 .database-tools .tool-active {
-  color: #2383e2;
-  background: #eaf4fe;
+  color: var(--blue);
+  background: var(--selected);
 }
 .database-search {
   display: flex;
   align-items: center;
   gap: 3px;
-  color: #9b9a97;
+  color: var(--subtle);
   margin: 0 3px;
 }
 .database-search input {
@@ -72,9 +72,9 @@
   min-height: 25px;
   padding: 3px 7px;
   font-size: 0.8571rem;
-  background: #f2f7fc;
-  border-color: #e2edf9;
-  color: #2674b9;
+  background: var(--selected-soft);
+  border-color: var(--selected-border);
+  color: var(--blue);
 }
 .database-chips > .muted {
   font-size: 0.8571rem;
@@ -87,7 +87,7 @@
   display: flex;
   flex-direction: column;
   padding: 6px;
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 6px;
   box-shadow: 0 4px 18px #0002;
@@ -102,7 +102,7 @@
 }
 .view-menu button:hover,
 .column-menu > button:hover {
-  background: #f1f1ef;
+  background: var(--hover-soft);
 }
 .column-menu {
   left: 0;
@@ -139,7 +139,7 @@
   position: relative;
   text-align: left;
   font-weight: 400;
-  color: #787774;
+  color: var(--muted);
   height: 36px;
   border-bottom: 1px solid var(--line);
   border-right: 1px solid var(--line);
@@ -177,10 +177,10 @@
   flex-shrink: 0;
 }
 .database-table tbody tr:hover {
-  background: #fafaf9;
+  background: var(--surface-soft);
 }
 .database-table tr.row-selected {
-  background: #edf5fd;
+  background: var(--selected);
 }
 .database-row-title {
   min-height: 36px;
@@ -197,7 +197,7 @@
   position: relative;
 }
 .database-row-title > svg {
-  color: #9b9a97;
+  color: var(--subtle);
   flex-shrink: 0;
 }
 .database-row-title > span {
@@ -205,8 +205,8 @@
   position: absolute;
   right: 5px;
   top: 6px;
-  border: 1px solid #e3e3e1;
-  background: white;
+  border: 1px solid var(--border);
+  background: var(--surface);
   border-radius: 3px;
   font-size: 0.7857rem;
   padding: 2px 5px;
@@ -237,7 +237,7 @@
   cursor: default;
 }
 .cell-empty {
-  color: #c2c2bf;
+  color: var(--faint);
   font-size: 0.9286rem;
 }
 .database-table .cell-empty {
@@ -258,17 +258,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #b9b9b5;
+  border: 1px solid var(--border-strong);
   width: 14px;
   height: 14px;
   border-radius: 2px;
-  color: white;
+  color: var(--on-blue);
   font-size: 0.8571rem;
   flex-shrink: 0;
 }
 .checkbox-display.checked {
-  background: #2383e2;
-  border-color: #2383e2;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 .column-calculation {
   display: flex;
@@ -286,20 +286,20 @@
   border: 0;
   font-size: 0.7857rem;
   background: transparent;
-  color: #9b9a97;
+  color: var(--subtle);
 }
 .column-calculation span {
   font-size: 0.8571rem;
-  color: #666560;
+  color: var(--text-secondary);
 }
 .database-table tfoot td {
   border: 0;
 }
 .cell-editor {
-  background: white;
+  background: var(--surface);
   padding: 7px;
   min-width: 145px;
-  border: 1px solid #2383e2;
+  border: 1px solid var(--blue);
   box-shadow: 0 2px 8px #0001;
 }
 .cell-editor input,
@@ -328,7 +328,7 @@
   border: 0;
   border-radius: 0;
   background: none;
-  color: #9b9a97;
+  color: var(--subtle);
   width: 100%;
   padding: 7px 10px;
   font-size: 1rem;
@@ -341,13 +341,13 @@
   gap: 12px;
   padding-top: 13px;
   font-size: 0.8571rem;
-  color: #9b9a97;
+  color: var(--subtle);
 }
 .database-selection {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #edf5fd;
+  background: var(--selected);
   padding: 8px 12px;
   font-size: 0.9286rem;
 }
@@ -360,23 +360,23 @@
 .database-table th:nth-child(2) {
   position: sticky;
   left: 34px;
-  background: #fff;
+  background: var(--surface);
   z-index: 2;
 }
 .database-table td.db-check,
 .database-table th.db-check {
   position: sticky;
   left: 0;
-  background: #fff;
+  background: var(--surface);
   z-index: 3;
 }
 .database-table tr.row-selected td.db-title-cell,
 .database-table tr.row-selected td.db-check {
-  background: #edf5fd;
+  background: var(--selected);
 }
 .database-table tr:hover td.db-title-cell,
 .database-table tr:hover td.db-check {
-  background: #fafaf9;
+  background: var(--surface-soft);
 }
 .column-menu {
   z-index: 50;

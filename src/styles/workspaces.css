@@ -1,0 +1,44 @@
+.workspace-manager-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.workspace-manager-list {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+.workspace-manager-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.workspace-manager-info {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.workspace-manager-info > .tag {
+  margin-left: 10px;
+}
+.workspace-manager-info p,
+.workspace-manager-info small {
+  color: var(--muted);
+  display: block;
+  margin-top: 5px;
+}
+.workspace-row-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+@media (max-width: 850px) {
+  .workspace-manager-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
