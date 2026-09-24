@@ -16,6 +16,7 @@ supersedes: null
 | 时间 | 类型 | 目标 | 状态 | 主题 | 日志 |
 | --- | --- | --- | --- | --- | --- |
 | 2026-09-24 | feature | 工作台可编辑与删除；主题支持跟随系统 / 浅色 / 深色；考勤登记具备加号与撤销减号，保持公共模块和数据兼容。 | archived | workspace-management-theme-attendance-correction | [[日志/2026-09-24-工作台管理主题与考勤撤销.md|2026-09-24｜工作台管理、主题与考勤撤销]] |
+| 2026-09-24 | maintenance | - | archived | external-lab-report-document | [[日志/2026-09-24-外部实验报告填写.md|2026-09-24｜外部实验报告填写]] |
 | 2026-09-22 | maintenance | 重新生成 `dist/Ludian-latest` 与 `dist/Ludian-latest.zip`，确认压缩包、解压目录和正式 Windows 程序可交付。 | archived | ludian-release-rebuild | [[日志/2026-09-22-Ludian正式包重建.md|2026-09-22｜Ludian 正式包重建]] |
 | 2026-09-20 | feature | 依据用户需求、课表、四张截图和班级学生表构建初版 Windows 考勤应用。 | archived | attendance-initial-release | [[日志/2026-09-20-班级考勤初版.md|2026-09-20｜班级考勤初版]] |
 | 2026-09-20 | feature | 根据用户反馈，进一步查看 Notion 官方 UI 图片和数据库手册，重做色调、布局与数据库交互，改善字体观感。 | archived | notion-database-redesign | [[日志/2026-09-20-Notion界面与数据库改造.md|2026-09-20｜Notion 界面与数据库改造]] |
